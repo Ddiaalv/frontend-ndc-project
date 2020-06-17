@@ -55,15 +55,3 @@
   }
 }
 
-.pink {
-  background: linear-gradient(130deg, #fa598e 0%, #cf3a6b 100%);
-}
-.yellow {
-  background: linear-gradient(130deg, #ffeb7a 0%, #f3c450 100%);
-}
-.blue {
-  background: linear-gradient(130deg, #59ccfa 0%, #389dc6 100%);
-}
-.green {
-  background: linear-gradient(130deg, #59fa89 0%, #35c35f 100%);
-}

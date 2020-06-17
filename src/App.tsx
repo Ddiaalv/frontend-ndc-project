@@ -4,7 +4,8 @@ import './App.css';
 import bg from '../src/assets/bg.jpg';
 import bgNoteBook from '../src/assets/bg-notebook.jpg';
 import { ROUTE } from './utils/routes';
-import { Header } from './components/molecules/Header';
+import { Header } from './components/organisms/Header';
+import { MonsterSelector } from './components/organisms/MonsterSelector';
 
 const bgStyles = {
   app: {
@@ -27,7 +28,11 @@ const App: React.FC = () => {
               <Route exact path={ROUTE.weapons} />
               <Route exact path={ROUTE.armors} />
               <Route exact path={ROUTE.felyne} />
-              <Route exact path={ROUTE.monsters} />
+              <Route exact path={ROUTE.monsters}>
+                <div className="notebook-content">
+                  <MonsterSelector />
+                </div>
+              </Route>
             </Switch>
             <div className="paper-page paper-page-one" />
             <div className="paper-page paper-page-two" />
