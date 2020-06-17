@@ -1,7 +1,10 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import bg from '../src/assets/bg.jpg';
 import bgNoteBook from '../src/assets/bg-notebook.jpg';
+import { ROUTE } from './utils/routes';
+import { Header } from './components/molecules/Header';
 
 const bgStyles = {
   app: {
@@ -16,11 +19,21 @@ const App: React.FC = () => {
   return (
     <div className="App" style={bgStyles.app}>
       <div id="notebook" style={bgStyles.notebook}>
-        <div id="notebook-paper">
-          <div className="paper-page paper-page-one" />
-          <div className="paper-page paper-page-two" />
-          <div className="paper-page paper-page-three" />
-        </div>
+        <Router>
+          <div id="notebook-paper">
+            <Header />
+            <Switch>
+              <Route exact path={ROUTE.home} />
+              <Route exact path={ROUTE.weapons} />
+              <Route exact path={ROUTE.armors} />
+              <Route exact path={ROUTE.felyne} />
+              <Route exact path={ROUTE.monsters} />
+            </Switch>
+            <div className="paper-page paper-page-one" />
+            <div className="paper-page paper-page-two" />
+            <div className="paper-page paper-page-three" />
+          </div>
+        </Router>
       </div>
     </div>
   );

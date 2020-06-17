@@ -1,0 +1,15 @@
+.PostItMenu {
+  background: linear-gradient(130deg, #ffeb7a 0%, #f3c450 100%);
+  padding: 10px 15px;
+  text-transform: uppercase;
+  text-align: center;
+  a {
+    text-decoration: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .PostItMenu {
+    border-radius: 10px 10px 0 0;
+  }
+}
