@@ -5,28 +5,47 @@ import { MonsterIcon } from '../../atoms/MonsterIcon';
 
 interface MonsterListProps {
   monsterName: string;
+  elements: string[];
 }
 
-export const MonsterList: React.FC<MonsterListProps> = ({ monsterName }) => {
+export const MonsterList: React.FC<MonsterListProps> = ({ monsterName, elements }) => {
   const [errorFetch, setErrorFetch] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [monsterList, setMonsterList] = useState([]);
   const [filteredMonsters, setFilteredMonsters] = useState([]);
 
   const filterByMonsterName = (monster: any) => {
-    if (
-      monster.nombre
-        .toLowerCase()
-        .trim()
-        .includes(monsterName.toLowerCase().trim())
-    ) {
+    return monster.nombre
+      .toLowerCase()
+      .trim()
+      .includes(monsterName.toLowerCase().trim());
+  };
+
+  const filterByElements = (monster: any) => {
+    let comprobar = false;
+    elements.map((element) => {
+      if (monster[element] >= 2) {
+        comprobar = true;
+      }
+    });
+    if (comprobar) {
       return monster;
     }
   };
 
   useEffect(() => {
-    setFilteredMonsters(monsterList.filter(filterByMonsterName));
-  }, [monsterName]);
+    if (monsterName.length > 0) {
+      if (elements.length > 0) {
+        setFilteredMonsters(
+          monsterList.filter(filterByMonsterName).filter(filterByElements),
+        );
+      } else {
+        setFilteredMonsters(monsterList.filter(filterByMonsterName));
+      }
+    } else {
+      setFilteredMonsters(monsterList.filter(filterByElements));
+    }
+  }, [monsterName, elements]);
 
   useEffect(() => {
     fetch('http://backend-nodeca.herokuapp.com/listaMonstruos')
