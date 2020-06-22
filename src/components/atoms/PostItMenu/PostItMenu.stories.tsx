@@ -8,4 +8,6 @@ export default {
   decorators: [withA11y, (storyFn: any) => <BrowserRouter>{storyFn()}</BrowserRouter>],
 };
 
-export const withText = () => <PostItMenu path={'/'}> Inicio </PostItMenu>;
+export const withText = () => (
+  <PostItMenu path={'/'} bgColor={'yellow'} children={'inicio'} />
+);

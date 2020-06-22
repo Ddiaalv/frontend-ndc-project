@@ -1,13 +1,7 @@
 .Header {
   width: 100%;
-  nav {
-    display: flex;
-    flex-direction: column;
-    a {
-      text-decoration: none;
-    }
-  }
 }
+
 @media (min-width: 768px) {
   .Header {
     display: flex;

@@ -1,0 +1,16 @@
+$bg-img: url('../../../assets/monster-icon.jpg');
+
+.MonsterIcon{
+  width: 70px;
+  height: 70px;
+  background: $bg-img no-repeat;
+  background-size: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  margin: 2px;
+  img {
+    width: 90%;
+  }
+}
