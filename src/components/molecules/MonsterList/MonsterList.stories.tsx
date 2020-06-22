@@ -3,7 +3,7 @@ import { MonsterList } from './MonsterList';
 import { withA11y } from '@storybook/addon-a11y';
 
 export default {
-  title: 'MonsterList',
+  title: 'Molecules / MonsterList',
   decorators: [withA11y],
 };
 

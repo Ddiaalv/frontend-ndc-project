@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './MonsterList.scss';
 import { useEffect, useState } from 'react';
+import { MonsterIcon } from '../../atoms/MonsterIcon';
 
 interface MonsterListProps {
   monsterName: string;
@@ -24,8 +25,7 @@ export const MonsterList: React.FC<MonsterListProps> = ({ monsterName }) => {
   };
 
   useEffect(() => {
-    const filtered = monsterList.filter(filterByMonsterName);
-    setFilteredMonsters(filtered);
+    setFilteredMonsters(monsterList.filter(filterByMonsterName));
   }, [monsterName]);
 
   useEffect(() => {
@@ -54,16 +54,18 @@ export const MonsterList: React.FC<MonsterListProps> = ({ monsterName }) => {
         <div className="MonsterList">
           {filteredMonsters.map((monstruo) => (
             // @ts-ignore
-            <p>{monstruo.nombre}</p>
+            <MonsterIcon name={monstruo.ruta} />
           ))}
         </div>
       );
+    } else if (monsterName !== '') {
+      return <p>No existen coincidencias</p>;
     } else {
       return (
         <div className="MonsterList">
-          {monsterList.map((monstruo) => (
+          {monsterList.map((monstruo, index) => (
             // @ts-ignore
-            <p>{monstruo.nombre}</p>
+            <MonsterIcon name={monstruo.ruta} key={index} />
           ))}
         </div>
       );

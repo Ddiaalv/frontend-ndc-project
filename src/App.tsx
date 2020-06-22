@@ -21,7 +21,7 @@ const App: React.FC = () => {
     <div className="App" style={bgStyles.app}>
       <div id="notebook" style={bgStyles.notebook}>
         <Router>
-          <div id="notebook-paper">
+          <div id="NotebookPaper">
             <Header />
             <Switch>
               <Route exact path={ROUTE.home} />
@@ -29,7 +29,7 @@ const App: React.FC = () => {
               <Route exact path={ROUTE.armors} />
               <Route exact path={ROUTE.felyne} />
               <Route exact path={ROUTE.monsters}>
-                <div className="notebook-content">
+                <div className="NotebookContent">
                   <MonsterSelector />
                 </div>
               </Route>

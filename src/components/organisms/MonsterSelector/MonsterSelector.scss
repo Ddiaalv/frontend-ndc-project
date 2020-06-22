@@ -1,3 +1,16 @@
-.MonsterSelector{
+.MonsterSelector {
+  display:flex;
+  align-items: center;
+  form {
+    background: #ffeb7a;
+    max-width: 250px;
+    padding: 15px 10px;
+    display: flex;
+    border-bottom-right-radius: 60px 5px;
+    border-bottom-left-radius: 102px 5px;
+    box-shadow: 1px 1px 10px -7px rgba(0, 0, 0, 0.75);
+    .FieldForm {
 
+    }
+  }
 }
