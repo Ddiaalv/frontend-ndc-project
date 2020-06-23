@@ -1,25 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
-import bg from '../src/assets/bg.jpg';
-import bgNoteBook from '../src/assets/bg-notebook.jpg';
+import './App.scss';
 import { ROUTE } from './utils/routes';
 import { Header } from './components/organisms/Header';
 import { MonsterSelector } from './components/organisms/MonsterSelector';
-
-const bgStyles = {
-  app: {
-    background: `url(${bg})`,
-  },
-  notebook: {
-    background: `url(${bgNoteBook})`,
-  },
-};
+import bg from '../src/assets/bg.jpg';
+import bgNoteBook from '../src/assets/bg-notebook.jpg';
 
 const App: React.FC = () => {
   return (
-    <div className="App" style={bgStyles.app}>
-      <div id="notebook" style={bgStyles.notebook}>
+    <div className="App">
+      <div id="notebook">
         <Router>
           <div id="NotebookPaper">
             <Header />

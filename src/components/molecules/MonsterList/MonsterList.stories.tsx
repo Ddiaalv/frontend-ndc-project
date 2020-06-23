@@ -7,4 +7,6 @@ export default {
   decorators: [withA11y],
 };
 
-export const defaultView = () => <MonsterList monsterName={'Rathalos'} />;
+export const defaultView = () => (
+  <MonsterList monsterName={'Rathalos'} elements={['fuego', 'agua']} />
+);
