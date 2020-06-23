@@ -11,5 +11,9 @@ export default {
 const inputTypes = ['password', 'email', 'text', 'checkbox'];
 
 export const defaultView = () => (
-  <Input name={'monsterSearch'} type={select('Type:', inputTypes, 'value')} />
+  <Input
+    name={'monsterSearch'}
+    type={select('Type:', inputTypes, 'value')}
+    id={'CheckFuego'}
+  />
 );
