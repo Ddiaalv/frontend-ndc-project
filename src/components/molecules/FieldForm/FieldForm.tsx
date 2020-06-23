@@ -13,7 +13,7 @@ interface FieldFormProps {
 export const FieldForm: React.FC<FieldFormProps> = ({ name, text, type, onChange }) => (
   <div className="FieldForm">
     <Label name={name} text={text} />
-    <Input type={type} name={name} onChange={onChange} />
+    <Input id={name} type={type} name={name} onChange={onChange} />
   </div>
 );
 

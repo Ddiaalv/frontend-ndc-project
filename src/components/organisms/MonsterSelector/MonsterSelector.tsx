@@ -21,7 +21,7 @@ export const MonsterSelector: React.FC<{}> = () => {
 
   return (
     <div className="MonsterSelector">
-      <form>
+      <form className={'MonsterFilter'}>
         <FieldForm
           type={'search'}
           name={'monsterSearcher'}

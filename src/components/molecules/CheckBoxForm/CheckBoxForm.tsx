@@ -12,10 +12,11 @@ export const CheckBoxForm: React.FC<CheckBoxFormProps> = ({ onChange }) => {
   return (
     <div className="CheckBoxForm">
       Debilidades:
-      {elements.map((element) => {
+      {elements.map((element, index) => {
         return (
-          <div className="CheckBoxField">
+          <div className="CheckBoxField" key={index}>
             <Input
+              id={`Check${element}`}
               type={'checkbox'}
               name={`Check${element}`}
               value={element.toLowerCase()}

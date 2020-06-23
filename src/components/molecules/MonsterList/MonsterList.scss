@@ -1,7 +1,13 @@
 .MonsterList{
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 5px;
+
+}
+
+@media (min-width: 768px) {
+  .MonsterList{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 5px;
+  }
 }
