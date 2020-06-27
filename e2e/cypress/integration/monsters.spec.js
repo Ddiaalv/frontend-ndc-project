@@ -7,7 +7,7 @@ describe('Monster section', () => {
     cy.get('[href="/monstruos"] > .PostItMenu').click();
     cy.url().should('include', '/monstruos');
     cy.wait(500);
-    cy.get('.FieldForm > .Input')
+    cy.get('#monsterSearcher')
       .type(MONSTERNAME)
       .should('have.value', MONSTERNAME);
     cy.get('.MonsterList > :nth-child(3)');
@@ -18,17 +18,17 @@ describe('Monster section', () => {
     cy.get('[href="/monstruos"] > .PostItMenu').click();
     cy.url().should('include', '/monstruos');
     cy.wait(500);
-    cy.get(':nth-child(2) > .Input').check();
+    cy.get('#CheckFuego').check();
   });
 
-  it('Search monster by name', function() {
+  it('Search monster by name and weakness', function() {
     cy.visit(URL);
     cy.get('[href="/monstruos"] > .PostItMenu').click();
     cy.url().should('include', '/monstruos');
     cy.wait(500);
-    cy.get('.FieldForm > .Input')
+    cy.get('#monsterSearcher')
       .type(MONSTERNAME)
       .should('have.value', MONSTERNAME);
-    cy.get(':nth-child(2) > .Input').check();
+    cy.get('#CheckAgua').check();
   });
 });
