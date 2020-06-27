@@ -6,12 +6,11 @@ import { MonsterList } from '../../molecules/MonsterList';
 import { CheckBoxForm } from '../../molecules/CheckBoxForm';
 
 export const MonsterSelector: React.FC<{}> = () => {
-  const [getInput, setGetInput] = useState('');
-  const [elements, setElements] = useState([]);
+  const [getInput, setGetInput] = useState<string>('');
+  const [elements, setElements] = useState<string[]>([]);
 
-  const elementMonster = (event: any) => {
+  const elementMonster = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputElement = event.target.value;
-    // @ts-ignore
     if (!elements.includes(inputElement)) {
       setElements(elements.concat(inputElement));
     } else {
@@ -30,7 +29,7 @@ export const MonsterSelector: React.FC<{}> = () => {
         />
         <CheckBoxForm onChange={elementMonster} />
       </form>
-      <MonsterList monsterName={getInput} elements={elements} />
+      <MonsterList monsterName={getInput} pressedElements={elements} />
     </div>
   );
 };

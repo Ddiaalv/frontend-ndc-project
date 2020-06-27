@@ -5,47 +5,38 @@ import { MonsterIcon } from '../../atoms/MonsterIcon';
 
 interface MonsterListProps {
   monsterName: string;
-  elements: string[];
+  pressedElements: string[];
 }
 
-export const MonsterList: React.FC<MonsterListProps> = ({ monsterName, elements }) => {
+export const MonsterList: React.FC<MonsterListProps> = ({
+  monsterName,
+  pressedElements,
+}) => {
   const [errorFetch, setErrorFetch] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [monsterList, setMonsterList] = useState([]);
   const [filteredMonsters, setFilteredMonsters] = useState([]);
 
-  const filterByMonsterName = (monster: any) => {
-    return monster.nombre
-      .toLowerCase()
-      .trim()
-      .includes(monsterName.toLowerCase().trim());
-  };
+  const byMonsterName = filterByMonsterName(monsterName);
+  const byElements = filterByElements(pressedElements);
 
-  const filterByElements = (monster: any) => {
-    let comprobar = false;
-    elements.map((element) => {
-      if (monster[element] >= 2) {
-        comprobar = true;
+  const checkSearchFilters = (monsters: never[]) => {
+    const monsterNameHasContent = monsterName.length > 0;
+    const monsterWeaknessHasContent = pressedElements.length > 0;
+    if (monsterNameHasContent) {
+      if (monsterWeaknessHasContent) {
+        setFilteredMonsters(monsters.filter(byMonsterName).filter(byElements));
+      } else {
+        setFilteredMonsters(monsters.filter(byMonsterName));
       }
-    });
-    if (comprobar) {
-      return monster;
+    } else {
+      setFilteredMonsters(monsters.filter(byElements));
     }
   };
 
   useEffect(() => {
-    if (monsterName.length > 0) {
-      if (elements.length > 0) {
-        setFilteredMonsters(
-          monsterList.filter(filterByMonsterName).filter(filterByElements),
-        );
-      } else {
-        setFilteredMonsters(monsterList.filter(filterByMonsterName));
-      }
-    } else {
-      setFilteredMonsters(monsterList.filter(filterByElements));
-    }
-  }, [monsterName, elements]);
+    checkSearchFilters(monsterList);
+  }, [monsterName, pressedElements]);
 
   useEffect(() => {
     fetch('http://backend-nodeca.herokuapp.com/listaMonstruos')
@@ -93,3 +84,22 @@ export const MonsterList: React.FC<MonsterListProps> = ({ monsterName, elements 
 };
 
 MonsterList.displayName = 'MonsterList';
+
+const filterByMonsterName = (name: string) => (monster: any) => {
+  return monster.nombre
+    .toLowerCase()
+    .trim()
+    .includes(name.toLowerCase().trim());
+};
+
+const filterByElements = (elements: string[]) => (monster: any) => {
+  let comprobar = false;
+  elements.forEach((element: string) => {
+    if (monster[element] >= 2) {
+      comprobar = true;
+    }
+  });
+  if (comprobar) {
+    return monster;
+  }
+};

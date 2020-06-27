@@ -7,7 +7,7 @@ interface FieldFormProps {
   name: string;
   text: string;
   type: string;
-  onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 export const FieldForm: React.FC<FieldFormProps> = ({ name, text, type, onChange }) => (

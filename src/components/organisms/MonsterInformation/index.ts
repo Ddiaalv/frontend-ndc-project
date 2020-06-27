@@ -1,0 +1,1 @@
+export { MonsterInformation } from './MonsterInformation';

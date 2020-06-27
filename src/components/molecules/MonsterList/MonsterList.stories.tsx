@@ -8,5 +8,5 @@ export default {
 };
 
 export const defaultView = () => (
-  <MonsterList monsterName={'Rathalos'} elements={['fuego', 'agua']} />
+  <MonsterList monsterName={'Rathalos'} pressedElements={['fuego', 'agua']} />
 );

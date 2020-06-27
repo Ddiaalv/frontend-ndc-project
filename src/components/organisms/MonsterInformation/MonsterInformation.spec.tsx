@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { render, RenderResult } from '@testing-library/react';
-import { MonsterList } from './';
+import { MonsterInformation} from './';
 
-describe('MonsterList', () => {
+describe('MonsterInformation', () => {
   it('should display the default message', () => {
     const renderResult: RenderResult = render(
-      <MonsterList pressedElements={['fuego']} monsterName={'Rathalos'} />,
+      <MonsterInformation/>,
     );
-    expect(renderResult.queryByText('fuego')).toBeTruthy();
+    expect(renderResult.queryByText('Hello from MonsterInformation!')).toBeTruthy();
   });
 });
