@@ -4,10 +4,15 @@
 
 @media (min-width: 768px) {
   .Header {
-    display: flex;
-    justify-content: flex-end;
     position: absolute;
     top: -41px;
     right: 50px;
+    nav {
+      display: flex;
+      justify-content: flex-end;
+    }
+    #menu {
+      display: none;
+    }
   }
 }

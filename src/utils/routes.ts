@@ -3,5 +3,8 @@ export const ROUTE = {
   weapons: '/armas',
   armors: '/armaduras',
   felyne: '/felyne',
-  monsters: '/monstruos',
+  monsters: {
+    primary: '/monstruos',
+    secondary: '/monstruos/:monster',
+  },
 };

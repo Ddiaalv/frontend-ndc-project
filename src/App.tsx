@@ -4,8 +4,7 @@ import './App.scss';
 import { ROUTE } from './utils/routes';
 import { Header } from './components/organisms/Header';
 import { MonsterSelector } from './components/organisms/MonsterSelector';
-import bg from '../src/assets/bg.jpg';
-import bgNoteBook from '../src/assets/bg-notebook.jpg';
+import { MonsterInformation } from './components/organisms/MonsterInformation';
 
 const App: React.FC = () => {
   return (
@@ -19,9 +18,12 @@ const App: React.FC = () => {
               <Route exact path={ROUTE.weapons} />
               <Route exact path={ROUTE.armors} />
               <Route exact path={ROUTE.felyne} />
-              <Route exact path={ROUTE.monsters}>
+              <Route path={ROUTE.monsters.primary}>
                 <div className="NotebookContent">
                   <MonsterSelector />
+                  <Route path={ROUTE.monsters.secondary}>
+                    <MonsterInformation />
+                  </Route>
                 </div>
               </Route>
             </Switch>
