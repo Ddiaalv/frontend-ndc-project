@@ -2,6 +2,8 @@ import * as React from 'react';
 import './MonsterList.scss';
 import { useEffect, useState } from 'react';
 import { MonsterIcon } from '../../atoms/MonsterIcon';
+import { filterByElements, filterByMonsterName } from './filters';
+import { GetFetchData } from '../../../utils/hooks/GetFetchData';
 
 interface MonsterListProps {
   monsterName: string;
@@ -12,9 +14,7 @@ export const MonsterList: React.FC<MonsterListProps> = ({
   monsterName,
   pressedElements,
 }) => {
-  const [errorFetch, setErrorFetch] = useState(null);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [monsterList, setMonsterList] = useState([]);
+  const { arrayData, isLoaded, error, getArrayData } = GetFetchData();
   const [filteredMonsters, setFilteredMonsters] = useState([]);
 
   const byMonsterName = filterByMonsterName(monsterName);
@@ -35,71 +35,35 @@ export const MonsterList: React.FC<MonsterListProps> = ({
   };
 
   useEffect(() => {
-    checkSearchFilters(monsterList);
-  }, [monsterName, pressedElements]);
-
-  useEffect(() => {
-    fetch('http://backend-nodeca.herokuapp.com/listaMonstruos')
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setMonsterList(result);
-        },
-        (error) => {
-          setIsLoaded(true);
-          setErrorFetch(error);
-        },
-      );
+    const URL = 'http://backend-nodeca.herokuapp.com/listaMonstruos';
+    getArrayData(URL);
   }, []);
 
-  if (errorFetch) {
-    // @ts-ignore
-    return <div>Error: {errorFetch.message}</div>;
-  } else if (!isLoaded) {
-    return <div>Cargando...</div>;
-  } else {
-    if (filteredMonsters.length !== 0) {
-      return (
-        <div className="MonsterList">
-          {filteredMonsters.map((monstruo) => (
-            // @ts-ignore
-            <MonsterIcon name={monstruo.ruta} />
-          ))}
-        </div>
-      );
-    } else if (monsterName !== '') {
-      return <p>No existen coincidencias</p>;
-    } else {
-      return (
-        <div className="MonsterList">
-          {monsterList.map((monstruo, index) => (
-            // @ts-ignore
-            <MonsterIcon name={monstruo.ruta} key={index} />
-          ))}
-        </div>
-      );
-    }
-  }
+  useEffect(() => {
+    checkSearchFilters(arrayData);
+  }, [monsterName, pressedElements]);
+
+  return (
+    <div className="MonsterList">
+      {error ? (
+        <p>errorFetch</p>
+      ) : !isLoaded ? (
+        <p>Cargando...</p>
+      ) : filteredMonsters.length !== 0 ? (
+        filteredMonsters.map((monstruo) => (
+          // @ts-ignore
+          <MonsterIcon name={monstruo.ruta} />
+        ))
+      ) : arrayData.length !== 0 ? (
+        arrayData.map((monstruo) => (
+          // @ts-ignore
+          <MonsterIcon name={monstruo.ruta} />
+        ))
+      ) : (
+        <p>no hay</p>
+      )}
+    </div>
+  );
 };
 
 MonsterList.displayName = 'MonsterList';
-
-const filterByMonsterName = (name: string) => (monster: any) => {
-  return monster.nombre
-    .toLowerCase()
-    .trim()
-    .includes(name.toLowerCase().trim());
-};
-
-const filterByElements = (elements: string[]) => (monster: any) => {
-  let comprobar = false;
-  elements.forEach((element: string) => {
-    if (monster[element] >= 2) {
-      comprobar = true;
-    }
-  });
-  if (comprobar) {
-    return monster;
-  }
-};
