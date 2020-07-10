@@ -6,14 +6,11 @@ const filterByMonsterName = (name: string) => (monster: any) => {
 };
 
 const filterByElements = (elements: string[]) => (monster: any) => {
-  let comprobar = false;
-  elements.forEach((element: string) => {
-    if (monster[element] >= 2) {
-      comprobar = true;
+  for (const element of elements) {
+    const isWeak = monster[element] >= 2;
+    if (isWeak) {
+      return monster;
     }
-  });
-  if (comprobar) {
-    return monster;
   }
 };
 
