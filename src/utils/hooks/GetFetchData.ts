@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { MonsterState } from '../../components/organisms/MonsterInformation/types';
+import {
+  MonstersProps,
+  MonsterProps,
+} from '../../components/organisms/MonsterInformation/types';
 
 export const GetFetchData = () => {
-  const [data, setData] = useState<MonsterState | undefined>();
-  const [arrayData, setArrayData] = useState([]);
+  const [objectData, setObjectData] = useState<MonsterProps>();
+  const [arrayData, setArrayData] = useState<MonstersProps[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
 
@@ -13,7 +16,7 @@ export const GetFetchData = () => {
       .then(
         (result) => {
           setIsLoaded(true);
-          setData(result[0]);
+          setObjectData(result[0]);
         },
         (errorFetch) => {
           setIsLoaded(true);
@@ -36,5 +39,5 @@ export const GetFetchData = () => {
         },
       );
   };
-  return { data, arrayData, isLoaded, error, getObjectData, getArrayData };
+  return { data: objectData, arrayData, isLoaded, error, getObjectData, getArrayData };
 };
