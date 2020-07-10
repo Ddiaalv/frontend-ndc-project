@@ -1,5 +1,17 @@
-export interface MonsterState {
-  id_monstruo: number;
+export type MonstersProps = {
+  orden_menu: number;
+  nombre: string;
+  ruta: string;
+  tipo: string;
+  especie: string;
+  fuego: number;
+  agua: number;
+  rayo: number;
+  hielo: number;
+  draco: number;
+};
+
+export type MonsterProps = {
   orden_menu: number;
   nombre: string;
   ruta: string;
@@ -21,11 +33,11 @@ export interface MonsterState {
   nitro: number;
   aturdimiento: number;
   elemento01: string;
-  elemento02: string;
+  elemento02?: string;
   resistencia01: string;
-  resistencia02: string;
-  resistencia03: string;
+  resistencia02?: string;
+  resistencia03?: string;
   estado01: string;
-  estado02: string;
-  estado03: string;
-}
+  estado02?: string;
+  estado03?: string;
+};

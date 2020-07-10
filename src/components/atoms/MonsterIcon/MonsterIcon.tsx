@@ -1,6 +1,5 @@
 import * as React from 'react';
 import './MonsterIcon.scss';
-import img from '../../../../public/img/monster/icon/monster-icon.jpg';
 import { Link } from 'react-router-dom';
 
 interface MonsterIconProps {

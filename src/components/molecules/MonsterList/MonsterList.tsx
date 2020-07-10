@@ -1,9 +1,10 @@
 import * as React from 'react';
-import './MonsterList.scss';
 import { useEffect, useState } from 'react';
+import './MonsterList.scss';
 import { MonsterIcon } from '../../atoms/MonsterIcon';
 import { filterByElements, filterByMonsterName } from './filters';
 import { GetFetchData } from '../../../utils/hooks/GetFetchData';
+import { MonstersProps } from '../../organisms/MonsterInformation/types';
 
 interface MonsterListProps {
   monsterName: string;
@@ -15,16 +16,14 @@ export const MonsterList: React.FC<MonsterListProps> = ({
   pressedElements,
 }) => {
   const { arrayData, isLoaded, error, getArrayData } = GetFetchData();
-  const [filteredMonsters, setFilteredMonsters] = useState([]);
+  const [filteredMonsters, setFilteredMonsters] = useState<MonstersProps[]>([]);
 
   const byMonsterName = filterByMonsterName(monsterName);
   const byElements = filterByElements(pressedElements);
 
-  const checkSearchFilters = (monsters: never[]) => {
-    const monsterNameHasContent = monsterName.length > 0;
-    const monsterWeaknessHasContent = pressedElements.length > 0;
-    if (monsterNameHasContent) {
-      if (monsterWeaknessHasContent) {
+  const checkSearchFilters = (monsters: MonstersProps[]) => {
+    if (monsterName.length > 0) {
+      if (pressedElements.length > 0) {
         setFilteredMonsters(monsters.filter(byMonsterName).filter(byElements));
       } else {
         setFilteredMonsters(monsters.filter(byMonsterName));
@@ -51,16 +50,14 @@ export const MonsterList: React.FC<MonsterListProps> = ({
         <p>Cargando...</p>
       ) : filteredMonsters.length !== 0 ? (
         filteredMonsters.map((monstruo) => (
-          // @ts-ignore
           <MonsterIcon name={monstruo.ruta} />
         ))
       ) : arrayData.length !== 0 ? (
         arrayData.map((monstruo) => (
-          // @ts-ignore
           <MonsterIcon name={monstruo.ruta} />
         ))
       ) : (
-        <p>no hay</p>
+        <p>No existen coincidencias...</p>
       )}
     </div>
   );
