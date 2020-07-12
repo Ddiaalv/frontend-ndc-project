@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import './MonsterList.scss';
 import { MonsterIcon } from '../../atoms/MonsterIcon';
 import { filterByElements, filterByMonsterName } from './filters';
-import { GetFetchData } from '../../../utils/hooks/GetFetchData';
 import { MonstersProps } from '../../organisms/MonsterInformation/types';
 
 interface MonsterListProps {
@@ -15,31 +14,44 @@ export const MonsterList: React.FC<MonsterListProps> = ({
   monsterName,
   pressedElements,
 }) => {
-  const { arrayData, isLoaded, error, getArrayData } = GetFetchData();
+  const [monsters, setMonsters] = useState<MonstersProps[]>([]);
   const [filteredMonsters, setFilteredMonsters] = useState<MonstersProps[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(false);
 
   const byMonsterName = filterByMonsterName(monsterName);
   const byElements = filterByElements(pressedElements);
 
-  const checkSearchFilters = (monsters: MonstersProps[]) => {
+  const checkSearchFilters = (monsterList: MonstersProps[]) => {
     if (monsterName.length > 0) {
       if (pressedElements.length > 0) {
-        setFilteredMonsters(monsters.filter(byMonsterName).filter(byElements));
+        setFilteredMonsters(monsterList.filter(byMonsterName).filter(byElements));
       } else {
-        setFilteredMonsters(monsters.filter(byMonsterName));
+        setFilteredMonsters(monsterList.filter(byMonsterName));
       }
     } else {
-      setFilteredMonsters(monsters.filter(byElements));
+      setFilteredMonsters(monsterList.filter(byElements));
     }
   };
 
   useEffect(() => {
     const URL = 'http://backend-nodeca.herokuapp.com/listaMonstruos';
-    getArrayData(URL);
+    fetch(URL)
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setMonsters(result);
+        },
+        (errorFetch) => {
+          setIsLoaded(true);
+          setError(errorFetch);
+        },
+      );
   }, []);
 
   useEffect(() => {
-    checkSearchFilters(arrayData);
+    checkSearchFilters(monsters);
   }, [monsterName, pressedElements]);
 
   return (
@@ -49,13 +61,9 @@ export const MonsterList: React.FC<MonsterListProps> = ({
       ) : !isLoaded ? (
         <p>Cargando...</p>
       ) : filteredMonsters.length !== 0 ? (
-        filteredMonsters.map((monstruo) => (
-          <MonsterIcon name={monstruo.ruta} />
-        ))
-      ) : arrayData.length !== 0 ? (
-        arrayData.map((monstruo) => (
-          <MonsterIcon name={monstruo.ruta} />
-        ))
+        filteredMonsters.map((monstruo) => <MonsterIcon name={monstruo.ruta} />)
+      ) : monsters.length !== 0 ? (
+        monsters.map((monstruo) => <MonsterIcon name={monstruo.ruta} />)
       ) : (
         <p>No existen coincidencias...</p>
       )}
