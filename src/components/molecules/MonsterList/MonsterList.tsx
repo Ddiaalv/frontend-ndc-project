@@ -4,6 +4,7 @@ import './MonsterList.scss';
 import { MonsterIcon } from '../../atoms/MonsterIcon';
 import { filterByElements, filterByMonsterName } from './filters';
 import { MonstersProps } from '../../organisms/MonsterInformation/types';
+import { URL } from '../../../utils/routes';
 
 interface MonsterListProps {
   monsterName: string;
@@ -35,8 +36,11 @@ export const MonsterList: React.FC<MonsterListProps> = ({
   };
 
   useEffect(() => {
-    const URL = 'http://backend-nodeca.herokuapp.com/listaMonstruos';
-    fetch(URL)
+    let fetchUrl = `${URL.server}/listaMonstruos`;
+    if (process.env.NODE_ENV !== 'production') {
+      fetchUrl = `${URL.local}/monsters`;
+    }
+    fetch(fetchUrl)
       .then((res) => res.json())
       .then(
         (result) => {

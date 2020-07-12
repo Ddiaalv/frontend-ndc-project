@@ -6,6 +6,7 @@ import { MonsterCard } from '../../molecules/MonsterCard';
 import bigCrown from '../../../assets/big-crown.png';
 import { Article } from '../../molecules/Article';
 import { MonsterProps } from './types';
+import { URL } from '../../../utils/routes';
 
 export const MonsterInformation: React.FC<{}> = () => {
   const { monster: urlParam } = useParams();
@@ -14,14 +15,16 @@ export const MonsterInformation: React.FC<{}> = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const URL = `https://backend-nodeca.herokuapp.com/monstruo/${urlParam}`;
-    // const URL = `http://localhost:3010/monsters/${urlParam}`;
-    fetch(URL)
+    let fetchUrl = `${URL.server}/monstruo/${urlParam}`;
+    if (process.env.NODE_ENV !== 'production') {
+      fetchUrl = `${URL.local}/monsters/${urlParam}`;
+    }
+    fetch(fetchUrl)
       .then((res) => res.json())
       .then(
         (result) => {
           setIsLoaded(true);
-          setMonsterInfo(result[0]);
+          setMonsterInfo(result);
         },
         (errorFetch) => {
           setIsLoaded(true);
