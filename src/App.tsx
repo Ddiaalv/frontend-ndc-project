@@ -5,6 +5,7 @@ import { ROUTE } from './utils/routes';
 import { Header } from './components/organisms/Header';
 import { MonsterSelector } from './components/organisms/MonsterSelector';
 import { MonsterInformation } from './components/organisms/MonsterInformation';
+import { Craftsmanship } from './pages/Craftsmanship';
 
 const App: React.FC = () => {
   return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
               <Route exact path={ROUTE.home} />
               <Route exact path={ROUTE.weapons} />
               <Route exact path={ROUTE.armors} />
+              <Route exact path={ROUTE.craftsmanship} component={Craftsmanship} />
               <Route exact path={ROUTE.felyne} />
               <Route path={ROUTE.monsters.primary}>
                 <div className="NotebookContent">

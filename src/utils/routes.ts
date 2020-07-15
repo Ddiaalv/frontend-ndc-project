@@ -7,6 +7,7 @@ export const ROUTE = {
     primary: '/monstruos',
     secondary: '/monstruos/:monster',
   },
+  craftsmanship: '/craftsmanship'
 };
 
 export const URL = {

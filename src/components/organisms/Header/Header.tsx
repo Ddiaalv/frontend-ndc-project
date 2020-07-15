@@ -10,6 +10,7 @@ export const Header: React.FC<{}> = () => {
     { name: 'armaduras', color: 'blue', route: ROUTE.armors },
     { name: 'felyne', color: 'green', route: ROUTE.felyne },
     { name: 'monsters', color: 'pink', route: ROUTE.monsters.primary },
+    { name: 'craftsmanship', color: 'yellow', route: ROUTE.craftsmanship },
   ];
 
   const hideMenu = () => {
