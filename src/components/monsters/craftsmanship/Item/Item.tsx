@@ -14,7 +14,7 @@ export const Item: React.FC<ItemProps> = ({ text, key, draggableId, index }) => 
     <Draggable key={key} draggableId={draggableId} index={index}>
       {(provided) => (
         <div
-          className="item"
+          className="Item"
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}

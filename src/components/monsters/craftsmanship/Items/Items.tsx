@@ -13,7 +13,7 @@ export const Items: React.FC<ItemsProps> = ({ items }) => (
       <div
         {...provided.droppableProps}
         ref={provided.innerRef}
-        style={{ background: 'orange', height: '150px', alignItems: 'center' }}
+        style={{ background: 'orange', height: '150px', alignItems: 'center', display: 'flex' }}
       >
         {items.map((item: any, index: number) => (
           <Item draggableId={item.id.toString()} key={item.id} index={index} text={item.nombre} />
