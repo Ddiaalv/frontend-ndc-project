@@ -23,11 +23,12 @@ export const DroppableItemFrame: React.FC<DroppableItemFrameProps> = ({
           height: '150px',
           width: '150px',
           alignItems: 'center',
+          border: '2px black solid'
         }}
       >
         {itemEquiped !== undefined ? (
           <Item
-            draggableId={itemEquiped.id}
+            draggableId={itemEquiped.id.toString()}
             key={itemEquiped.id}
             index={1}
             text={itemEquiped.nombre}

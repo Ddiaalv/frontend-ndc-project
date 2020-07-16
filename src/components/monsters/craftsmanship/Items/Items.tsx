@@ -16,7 +16,7 @@ export const Items: React.FC<ItemsProps> = ({ items }) => (
         style={{ background: 'orange', height: '150px', alignItems: 'center' }}
       >
         {items.map((item: any, index: number) => (
-          <Item draggableId={item.id} key={item.id} index={index} text={item.nombre} />
+          <Item draggableId={item.id.toString()} key={item.id} index={index} text={item.nombre} />
         ))}
         {provided.placeholder}
       </div>
