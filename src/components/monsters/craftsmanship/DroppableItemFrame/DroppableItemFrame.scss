@@ -1,3 +1,9 @@
-.DroppableItemFrame{
-
+.DroppableItemFrame {
+  background: saddlebrown;
+  border: 1px solid #000;
+  margin: 5px;
+  display: flex;
+  min-height: 120px;
+  justify-content: center;
+  align-items: center;
 }

@@ -14,17 +14,9 @@ export const DroppableItemFrame: React.FC<DroppableItemFrameProps> = ({
 }) => (
   <Droppable droppableId={itemType}>
     {(provided) => (
-      <div
+      <div className="DroppableItemFrame"
         {...provided.droppableProps}
         ref={provided.innerRef}
-        style={{
-          background: 'red',
-          display: 'flex',
-          height: '150px',
-          width: '150px',
-          alignItems: 'center',
-          border: '2px black solid'
-        }}
       >
         {itemEquiped !== undefined ? (
           <Item
@@ -32,6 +24,7 @@ export const DroppableItemFrame: React.FC<DroppableItemFrameProps> = ({
             key={itemEquiped.id}
             index={1}
             text={itemEquiped.nombre}
+            imgRoute={itemEquiped.ruta}
           />
         ) : (
           ''

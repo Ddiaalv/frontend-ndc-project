@@ -10,13 +10,15 @@ type ItemsProps = {
 export const Items: React.FC<ItemsProps> = ({ items }) => (
   <Droppable droppableId="items">
     {(provided) => (
-      <div
-        {...provided.droppableProps}
-        ref={provided.innerRef}
-        style={{ background: 'orange', height: '150px', alignItems: 'center', display: 'flex' }}
-      >
+      <div className="Items" {...provided.droppableProps} ref={provided.innerRef}>
         {items.map((item: any, index: number) => (
-          <Item draggableId={item.id.toString()} key={item.id} index={index} text={item.nombre} />
+          <Item
+            draggableId={item.id.toString()}
+            key={item.id}
+            index={index}
+            text={item.nombre}
+            imgRoute={item.ruta}
+          />
         ))}
         {provided.placeholder}
       </div>

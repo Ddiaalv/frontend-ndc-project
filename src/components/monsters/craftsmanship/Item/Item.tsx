@@ -4,12 +4,19 @@ import { Draggable } from 'react-beautiful-dnd';
 
 type ItemProps = {
   text: string;
+  imgRoute: string;
   key: any;
   draggableId: string;
   index: number;
 };
 
-export const Item: React.FC<ItemProps> = ({ text, key, draggableId, index }) => {
+export const Item: React.FC<ItemProps> = ({
+  text,
+  key,
+  draggableId,
+  index,
+  imgRoute,
+}) => {
   return (
     <Draggable key={key} draggableId={draggableId} index={index}>
       {(provided) => (
@@ -19,7 +26,9 @@ export const Item: React.FC<ItemProps> = ({ text, key, draggableId, index }) => 
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          {text}
+          <img src={`http://localhost:3010/img/items/${imgRoute}.png`} alt="" />
+          <span>{text}</span>
+
         </div>
       )}
     </Draggable>

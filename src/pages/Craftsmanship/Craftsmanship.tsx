@@ -15,11 +15,11 @@ export const Craftsmanship: React.FC<{}> = () => {
   const itemsMock = [
     {
       id: 20001,
-      nombre: 'Maza',
+      nombre: 'Cuchillo cazador',
       tipo: 'arma',
       rama: '',
       ramaEvo: 0,
-      ruta: '',
+      ruta: 'weapon/sas/cuchilloCazador',
       rareza: 0,
       evolucion: '',
       precio: 0,
@@ -57,11 +57,53 @@ export const Craftsmanship: React.FC<{}> = () => {
     },
     {
       id: 20002,
-      nombre: 'Cuchillo',
+      nombre: 'Kys Hazak',
       tipo: 'arma',
       rama: '',
       ramaEvo: 0,
-      ruta: '',
+      ruta: 'weapon/gs/kysHazak',
+      rareza: 0,
+      evolucion: '',
+      precio: 0,
+      ataque: 0,
+      danio_elemento01: 0,
+      elemento_01: '',
+      elemento01: '',
+      danio_elemento02: 0,
+      elemento_02: '',
+      elemento02: '',
+      afilado: '',
+      afinidad: 10,
+      defensa: 10,
+      sello_ancianos: '',
+      ranura01: '',
+      ranura02: '',
+      ranura03: '',
+      tipo_vial: '',
+      danio_vial: 0,
+      elemento_vial: '',
+      numero_disparos: 0,
+      tipo_disparo: '',
+      nota01: '',
+      nota02: '',
+      nota03: '',
+      modificaciones: 0,
+      desvio: '',
+      tiro_especial: '',
+      bonus_kinsecto: '',
+      vial01: '',
+      vial02: '',
+      vial03: '',
+      vial04: '',
+      vial05: '',
+    },
+    {
+      id: 20003,
+      nombre: 'Filo Wyvern "Hoja"',
+      tipo: 'arma',
+      rama: '',
+      ramaEvo: 0,
+      ruta: 'weapon/ls/filoWyvernHoja',
       rareza: 0,
       evolucion: '',
       precio: 0,
@@ -99,9 +141,9 @@ export const Craftsmanship: React.FC<{}> = () => {
     },
     {
       id: 1,
-      nombre: 'Lentes de cuero',
+      nombre: 'Yelmo de Anja',
       tipo: 'casco',
-      ruta: 'armor/lentesCuero',
+      ruta: 'armor/yelmoAnja',
       rama: 'Cuero',
       rango: 'bajo',
       nivel: 1,
@@ -121,8 +163,8 @@ export const Craftsmanship: React.FC<{}> = () => {
     },
     {
       id: 2,
-      nombre: 'Yelmo de Jagras',
-      ruta: 'armor/yelmoJagras',
+      nombre: 'Yelmo de Rathian',
+      ruta: 'armor/yelmoRathian',
       tipo: 'casco',
       rama: 'Cuero',
       rango: 'bajo',
@@ -143,8 +185,8 @@ export const Craftsmanship: React.FC<{}> = () => {
     },
     {
       id: 3,
-      nombre: 'Cota de aleación',
-      ruta: 'armor/cotaAleacion',
+      nombre: 'Cota de Anja',
+      ruta: 'armor/cotaAnja',
       tipo: 'pechera',
       rama: 'Aleación',
       rango: 'bajo',
@@ -165,8 +207,8 @@ export const Craftsmanship: React.FC<{}> = () => {
     },
     {
       id: 4,
-      nombre: 'Brazales de cazador',
-      ruta: 'armor/brazalesCazador',
+      nombre: 'Brazales de Anja',
+      ruta: 'armor/brazalesAnja',
       tipo: 'guanteletes',
       rama: 'Cuero',
       rango: 'bajo',
@@ -187,8 +229,8 @@ export const Craftsmanship: React.FC<{}> = () => {
     },
     {
       id: 5,
-      nombre: 'Faja de Barroth',
-      ruta: 'armor/fajaBarroth',
+      nombre: 'Faja de Anja',
+      ruta: 'armor/fajaAnja',
       tipo: 'cintura',
       rama: 'Cuero',
       rango: 'bajo',
@@ -209,8 +251,8 @@ export const Craftsmanship: React.FC<{}> = () => {
     },
     {
       id: 6,
-      nombre: 'Grebas de Barroth',
-      ruta: 'armor/fajaBarroth',
+      nombre: 'Grebas de Anja',
+      ruta: 'armor/grebasAnja',
       tipo: 'grebas',
       rama: 'Cuero',
       rango: 'bajo',
@@ -486,28 +528,47 @@ export const Craftsmanship: React.FC<{}> = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Items items={items} />
-      <div className="armorSet" style={{ display: 'flex' }}>
-        <DroppableItemFrame itemEquiped={itemsEquipped.arma} itemType={'arma'} />
-        <DroppableItemFrame itemEquiped={itemsEquipped.casco} itemType={'casco'} />
-        <DroppableItemFrame itemEquiped={itemsEquipped.pechera} itemType={'pechera'} />
-        <DroppableItemFrame
-          itemEquiped={itemsEquipped.guanteletes}
-          itemType={'guanteletes'}
-        />
-        <DroppableItemFrame itemEquiped={itemsEquipped.cintura} itemType={'cintura'} />
-        <DroppableItemFrame itemEquiped={itemsEquipped.grebas} itemType={'grebas'} />
-      </div>
-      <div className="equipmentStats">
-        <p>Defensa: {itemsEquippedStats.defensa}</p>
-        <p>Fuego: {itemsEquippedStats.fuego}</p>
-        <p>Agua: {itemsEquippedStats.agua}</p>
-        <p>Rayo: {itemsEquippedStats.rayo}</p>
-        <p>Hielo: {itemsEquippedStats.hielo}</p>
-        <p>Draco: {itemsEquippedStats.draco}</p>
-      </div>
-    </DragDropContext>
+    <div className="Craftsmanship">
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Items items={items} />
+        <div id="Forge">
+          <div className="ArmorSet" style={{ display: 'flex' }}>
+            <div className="weaponSection">
+              <DroppableItemFrame itemEquiped={itemsEquipped.arma} itemType={'arma'} />
+            </div>
+            <div className="ArmorSectionCenter">
+              <DroppableItemFrame itemEquiped={itemsEquipped.casco} itemType={'casco'} />
+              <DroppableItemFrame
+                itemEquiped={itemsEquipped.pechera}
+                itemType={'pechera'}
+              />
+              <DroppableItemFrame
+                itemEquiped={itemsEquipped.cintura}
+                itemType={'cintura'}
+              />
+              <DroppableItemFrame
+                itemEquiped={itemsEquipped.grebas}
+                itemType={'grebas'}
+              />
+            </div>
+            <div className="ArmorSectionRight">
+              <DroppableItemFrame
+                itemEquiped={itemsEquipped.guanteletes}
+                itemType={'guanteletes'}
+              />
+            </div>
+          </div>
+          <div className="EquipmentStats">
+            <p>Defensa: {itemsEquippedStats.defensa}</p>
+            <p>Fuego: {itemsEquippedStats.fuego}</p>
+            <p>Agua: {itemsEquippedStats.agua}</p>
+            <p>Rayo: {itemsEquippedStats.rayo}</p>
+            <p>Hielo: {itemsEquippedStats.hielo}</p>
+            <p>Draco: {itemsEquippedStats.draco}</p>
+          </div>
+        </div>
+      </DragDropContext>
+    </div>
   );
 };
 

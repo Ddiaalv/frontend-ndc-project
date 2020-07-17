@@ -1,5 +1,17 @@
-.Item{
+.Item {
   background: cornflowerblue;
-  border: 1px solid black;
   margin: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 150px;
+  text-align: center;
+  img {
+    width: 80px;
+  }
+  span {
+    background: #fff;
+    width: 100%;
+  }
 }

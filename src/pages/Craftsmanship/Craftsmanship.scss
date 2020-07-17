@@ -1,3 +1,16 @@
-.Craftsmanship{
-
+.Craftsmanship {
+  #Forge {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .ArmorSet {
+    display: flex;
+    align-items: center;
+  }
+  .EquipmentStats {
+    padding: 10px;
+    width: 100%;
+  }
 }
