@@ -11,6 +11,43 @@ import {
   weaponType,
 } from './types';
 
+const filterByItemName = (name: string) => (item: any) => {
+  return item.nombre.toLowerCase().trim().includes(name.toLowerCase().trim());
+};
+
+function checkIfAItemIsEquipped(equipment: any) {
+  let check = false;
+  for (const itemsEquippedKey in equipment) {
+    if (equipment.hasOwnProperty(itemsEquippedKey)) {
+      // @ts-ignore
+      const itemEquipped = equipment[itemsEquippedKey];
+      if (itemEquipped.nombre !== '') {
+        check = true;
+      }
+    }
+  }
+  return check;
+}
+
+function removeItemEquippedFromList(
+  itemsEquipped: itemsEquipedProps,
+  arrayProvisional: (armorType | weaponType)[],
+) {
+  for (const itemsEquippedKey in itemsEquipped) {
+    if (itemsEquipped.hasOwnProperty(itemsEquippedKey)) {
+      // @ts-ignore
+      const itemEquipped = itemsEquipped[itemsEquippedKey];
+      if (itemEquipped.nombre !== '') {
+        const pos = arrayProvisional
+          .map((x: any) => x.nombre)
+          .indexOf(itemEquipped.nombre);
+        arrayProvisional.splice(pos, 1);
+      }
+    }
+  }
+  return arrayProvisional;
+}
+
 export const Craftsmanship: React.FC<{}> = () => {
   const itemsMock = [
     {
@@ -25,7 +62,7 @@ export const Craftsmanship: React.FC<{}> = () => {
       precio: 0,
       ataque: 0,
       danio_elemento01: 0,
-      elemento_01: '',
+      elemento_01: 'Fuego',
       elemento01: '',
       danio_elemento02: 0,
       elemento_02: '',
@@ -67,7 +104,7 @@ export const Craftsmanship: React.FC<{}> = () => {
       precio: 0,
       ataque: 0,
       danio_elemento01: 0,
-      elemento_01: '',
+      elemento_01: 'Agua',
       elemento01: '',
       danio_elemento02: 0,
       elemento_02: '',
@@ -272,7 +309,7 @@ export const Craftsmanship: React.FC<{}> = () => {
       habilidad2: 'hola',
     },
   ];
-  const itemsEquipedDefault = {
+  const itemsEquippedDefault = {
     arma: {
       id: 20000,
       nombre: '',
@@ -437,17 +474,44 @@ export const Craftsmanship: React.FC<{}> = () => {
   };
 
   const [items, setItems] = useState<(armorType | weaponType)[]>(itemsMock);
+  const [itemName, setItemName] = useState<string>('');
+  const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>([]);
   const [itemsEquippedStats, setItemsEquippedStats] = useState<itemsEquippedStatsProps>(
     equipmentStatsDefault,
   );
   const [itemsEquipped, setItemsEquipped] = useState<itemsEquipedProps>(
-    itemsEquipedDefault,
+    itemsEquippedDefault,
   );
 
   useEffect(() => {
     calculateEquipmentStats();
   }, [itemsEquipped]);
 
+  useEffect(() => {
+    checkFilters();
+  }, [itemName]);
+
+  function checkFilters() {
+    const byName = filterByItemName(itemName);
+    let arrayProvisional = items;
+    if (checkIfAItemIsEquipped(itemsEquipped)) {
+      if (itemName.length >= 0) {
+        arrayProvisional = removeItemEquippedFromList(
+          itemsEquipped,
+          items.filter(byName),
+        );
+      } else {
+        arrayProvisional = removeItemEquippedFromList(itemsEquipped, arrayProvisional);
+      }
+    } else {
+      if (itemName.length >= 0) {
+        arrayProvisional = items.filter(byName);
+      } else {
+        return items;
+      }
+    }
+    setItemsFiltered(arrayProvisional);
+  }
   function calculateEquipmentStats() {
     let defenseSum = 0;
     let fireSum = 0;
@@ -461,18 +525,18 @@ export const Craftsmanship: React.FC<{}> = () => {
         // FIXME: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'itemsEquipedProps'.
 
         // @ts-ignore
-        const itemEquiped = itemsEquipped[key];
-        if (itemEquiped.nombre !== '') {
-          if (itemEquiped.tipo !== 'arma') {
-            defenseSum += itemEquiped.defensa;
-            fireSum += itemEquiped.fuego;
-            waterSum += itemEquiped.agua;
-            thunderSum += itemEquiped.rayo;
-            iceSum += itemEquiped.hielo;
-            dracoSum += itemEquiped.draco;
+        const itemEquipped = itemsEquipped[key];
+        if (itemEquipped.nombre !== '') {
+          if (itemEquipped.tipo !== 'arma') {
+            defenseSum += itemEquipped.defensa;
+            fireSum += itemEquipped.fuego;
+            waterSum += itemEquipped.agua;
+            thunderSum += itemEquipped.rayo;
+            iceSum += itemEquipped.hielo;
+            dracoSum += itemEquipped.draco;
           } else {
-            defenseSum += itemEquiped.defensa;
-            attackSum += itemEquiped.ataque;
+            defenseSum += itemEquipped.defensa;
+            attackSum += itemEquipped.ataque;
           }
         }
       }
@@ -493,10 +557,10 @@ export const Craftsmanship: React.FC<{}> = () => {
       return;
     }
     const droppableSectionName = result.destination.droppableId;
-    const draggingItemType = items[result.source.index].tipo.toLowerCase();
+    const draggingItemType = itemsFiltered[result.source.index].tipo.toLowerCase();
     if (droppableSectionName === draggingItemType) {
       const indexItemFromSource = result.source.index;
-      const draggableItem = items[indexItemFromSource];
+      const draggableItem = itemsFiltered[indexItemFromSource];
       const deleteItemCount = 1;
       // @ts-ignore
       const oldItemEquipped = itemsEquipped[droppableSectionName];
@@ -520,7 +584,7 @@ export const Craftsmanship: React.FC<{}> = () => {
           setItemsEquipped({ ...itemsEquipped, grebas: draggableItem });
           break;
       }
-      items.splice(indexItemFromSource, deleteItemCount, oldItemEquipped);
+      itemsFiltered.splice(indexItemFromSource, deleteItemCount, oldItemEquipped);
     } else {
       // TODO: Show modal with error message
       console.log(`debe de ser un ${droppableSectionName}`);
@@ -529,8 +593,22 @@ export const Craftsmanship: React.FC<{}> = () => {
 
   return (
     <div className="Craftsmanship">
+      <div className="itemFilters">
+        <input
+          type="text"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setItemName(e.target.value)
+          }
+        />
+      </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Items items={items} />
+        {itemsFiltered.length > 0 ? (
+          <Items items={itemsFiltered} />
+        ) : itemsFiltered.length === 0 ? (
+          'No se encuentra '
+        ) : (
+          <Items items={items} />
+        )}
         <div id="Forge">
           <div className="ArmorSet" style={{ display: 'flex' }}>
             <div className="weaponSection">
