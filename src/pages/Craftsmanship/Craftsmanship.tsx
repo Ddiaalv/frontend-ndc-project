@@ -12,6 +12,7 @@ import {
   filterByItemName,
   itemsEquippedDefault,
   itemsMock,
+  removeItem,
 } from './utils';
 
 export const Craftsmanship: React.FC<{}> = () => {
@@ -99,21 +100,14 @@ export const Craftsmanship: React.FC<{}> = () => {
           });
           break;
       }
-
-      const itemsFilteredRemoveItemEquipped = itemsFiltered.filter(
-        (x) => x.nombre !== draggableItem.nombre,
-      );
-      const itemsRemoveItemEquipped = items.filter(
-        (x) => x.nombre !== draggableItem.nombre,
-      );
-
+      const itemsFilteredCopy = removeItem(itemsFiltered, draggableItem);
+      const itemsCopy = removeItem(items, draggableItem);
       if (oldItemEquipped.nombre !== '') {
-        itemsFilteredRemoveItemEquipped.push(oldItemEquipped);
-        itemsRemoveItemEquipped.push(oldItemEquipped);
+        itemsFilteredCopy.push(oldItemEquipped);
+        itemsCopy.push(oldItemEquipped);
       }
-
-      setItemsFiltered(itemsFilteredRemoveItemEquipped);
-      setItems(itemsRemoveItemEquipped);
+      setItemsFiltered(itemsFilteredCopy);
+      setItems(itemsCopy);
     } else {
       // TODO: Show modal with error message and change border color of droppable frame
       console.log(`debe de ser un ${droppableSectionName}`);
