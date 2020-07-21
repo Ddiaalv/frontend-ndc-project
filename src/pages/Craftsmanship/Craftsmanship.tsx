@@ -1,16 +1,12 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import './Craftsmanship.scss';
-import { DragDropContext } from 'react-beautiful-dnd';
-import { Items } from '../../components/monsters/craftsmanship/Items';
-import { DroppableItemFrame } from '../../components/monsters/craftsmanship/DroppableItemFrame';
+import {DragDropContext} from 'react-beautiful-dnd';
+import {Items} from '../../components/monsters/craftsmanship/Items';
+import {DroppableItemFrame} from '../../components/monsters/craftsmanship/DroppableItemFrame';
+import {armorType, itemsEquipedProps, itemsEquippedStatsProps, weaponType,} from './types';
 import {
-  armorType,
-  itemsEquipedProps,
-  itemsEquippedStatsProps,
-  weaponType,
-} from './types';
-import {
+  calculateEquipmentStats,
   checkIfAItemIsEquipped,
   equipmentStatsDefault,
   filterByItemName,
@@ -30,7 +26,7 @@ export const Craftsmanship: React.FC<{}> = () => {
   );
 
   useEffect(() => {
-    calculateEquipmentStats();
+    setItemsEquippedStats(calculateEquipmentStats(itemsEquipped));
   }, [itemsEquipped]);
 
   useEffect(() => {
@@ -52,45 +48,6 @@ export const Craftsmanship: React.FC<{}> = () => {
       }
     }
     setItemsFiltered(arrayProvisional);
-  }
-  function calculateEquipmentStats() {
-    let defenseSum = 0;
-    let fireSum = 0;
-    let waterSum = 0;
-    let thunderSum = 0;
-    let iceSum = 0;
-    let dracoSum = 0;
-    let attackSum = 0;
-    for (const key in itemsEquipped) {
-      if (itemsEquipped.hasOwnProperty(key)) {
-        // FIXME: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'itemsEquipedProps'.
-
-        // @ts-ignore
-        const itemEquipped = itemsEquipped[key];
-        if (itemEquipped.nombre !== '') {
-          if (itemEquipped.tipo !== 'arma') {
-            defenseSum += itemEquipped.defensa;
-            fireSum += itemEquipped.fuego;
-            waterSum += itemEquipped.agua;
-            thunderSum += itemEquipped.rayo;
-            iceSum += itemEquipped.hielo;
-            dracoSum += itemEquipped.draco;
-          } else {
-            defenseSum += itemEquipped.defensa;
-            attackSum += itemEquipped.ataque;
-          }
-        }
-      }
-    }
-    setItemsEquippedStats({
-      ataque: attackSum,
-      agua: waterSum,
-      draco: dracoSum,
-      fuego: fireSum,
-      hielo: iceSum,
-      rayo: thunderSum,
-      defensa: defenseSum,
-    });
   }
 
   const onDragEnd = (result: any) => {
