@@ -45,31 +45,11 @@ export const Craftsmanship: React.FC<{}> = () => {
     let arrayProvisional = items;
     const byName = filterByItemName(itemName);
     const byTypes = filterByItemTypes(typesPressed);
-
-    if (checkIfAItemIsEquipped(itemsEquipped)) {
-      if (itemName.length > 0) {
-        if (typesPressed.length > 0) {
-          arrayProvisional = items.filter(byName).filter(byTypes);
-        } else {
-          arrayProvisional = items.filter(byName);
-        }
-      } else {
-        if (typesPressed.length > 0) {
-          arrayProvisional = items.filter(byTypes);
-        }
-      }
-    } else {
-      if (itemName.length > 0) {
-        if (typesPressed.length > 0) {
-          arrayProvisional = items.filter(byName).filter(byTypes);
-        } else {
-          arrayProvisional = items.filter(byName);
-        }
-      } else {
-        if (typesPressed.length > 0) {
-          arrayProvisional = items.filter(byTypes);
-        }
-      }
+    if (itemName.length > 0) {
+      arrayProvisional = items.filter(byName);
+    }
+    if (typesPressed.length > 0) {
+      arrayProvisional = items.filter(byTypes);
     }
     setItemsFiltered(arrayProvisional);
   }
