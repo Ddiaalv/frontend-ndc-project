@@ -19,18 +19,42 @@ import {
   itemsMock,
   removeItem,
 } from './utils';
+import { URL } from '../../utils/routes';
 
 export const Craftsmanship: React.FC<{}> = () => {
   const [items, setItems] = useState<(armorType | weaponType)[]>(itemsMock);
+  const [itemsF, setItemsF] = useState<(armorType | weaponType)[]>();
+  const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>([]);
+
   const [itemName, setItemName] = useState<string>('');
   const [typesPressed, setTypesPressed] = useState<string[]>([]);
-  const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>([]);
+
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [error, setError] = useState();
+
   const [itemsEquippedStats, setItemsEquippedStats] = useState<itemsEquippedStatsProps>(
     equipmentStatsDefault,
   );
   const [itemsEquipped, setItemsEquipped] = useState<itemsEquipedProps>(
     itemsEquippedDefault,
   );
+
+  useEffect(() => {
+    const URLWEAPONS = 'http://localhost:3010/weapons';
+    const URLARMORS = 'http://localhost:3010/armors';
+
+    Promise.all([
+      fetch(URLWEAPONS).then((value) => value.json()),
+      fetch(URLARMORS).then((value) => value.json()),
+    ])
+      .then((value) => {
+        setItemsF(value[0].concat(value[1]));
+        setIsLoaded(true);
+      })
+      .catch((err) => {
+        setError(error);
+      });
+  }, []);
 
   useEffect(() => {
     setItemsEquippedStats(calculateEquipmentStats(itemsEquipped));
