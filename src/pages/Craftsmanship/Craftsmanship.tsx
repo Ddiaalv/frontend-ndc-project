@@ -1,15 +1,21 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import './Craftsmanship.scss';
-import {DragDropContext} from 'react-beautiful-dnd';
-import {Items} from '../../components/monsters/craftsmanship/Items';
-import {DroppableItemFrame} from '../../components/monsters/craftsmanship/DroppableItemFrame';
-import {armorType, itemsEquipedProps, itemsEquippedStatsProps, weaponType,} from './types';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { Items } from '../../components/monsters/craftsmanship/Items';
+import { DroppableItemFrame } from '../../components/monsters/craftsmanship/DroppableItemFrame';
+import {
+  armorType,
+  itemsEquipedProps,
+  itemsEquippedStatsProps,
+  weaponType,
+} from './types';
 import {
   calculateEquipmentStats,
   checkIfAItemIsEquipped,
   equipmentStatsDefault,
   filterByItemName,
+  filterByItemTypes,
   itemsEquippedDefault,
   itemsMock,
   removeItem,
@@ -18,6 +24,7 @@ import {
 export const Craftsmanship: React.FC<{}> = () => {
   const [items, setItems] = useState<(armorType | weaponType)[]>(itemsMock);
   const [itemName, setItemName] = useState<string>('');
+  const [typesPressed, setTypesPressed] = useState<string[]>([]);
   const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>([]);
   const [itemsEquippedStats, setItemsEquippedStats] = useState<itemsEquippedStatsProps>(
     equipmentStatsDefault,
@@ -32,20 +39,36 @@ export const Craftsmanship: React.FC<{}> = () => {
 
   useEffect(() => {
     checkFilters();
-  }, [itemName]);
+  }, [itemName, typesPressed]);
 
   function checkFilters() {
     let arrayProvisional = items;
     const byName = filterByItemName(itemName);
+    const byTypes = filterByItemTypes(typesPressed);
+
     if (checkIfAItemIsEquipped(itemsEquipped)) {
-      if (itemName.length >= 0) {
-        arrayProvisional = items.filter(byName);
+      if (itemName.length > 0) {
+        if (typesPressed.length > 0) {
+          arrayProvisional = items.filter(byName).filter(byTypes);
+        } else {
+          arrayProvisional = items.filter(byName);
+        }
+      } else {
+        if (typesPressed.length > 0) {
+          arrayProvisional = items.filter(byTypes);
+        }
       }
     } else {
-      if (itemName.length >= 0) {
-        arrayProvisional = items.filter(byName);
+      if (itemName.length > 0) {
+        if (typesPressed.length > 0) {
+          arrayProvisional = items.filter(byName).filter(byTypes);
+        } else {
+          arrayProvisional = items.filter(byName);
+        }
       } else {
-        return items;
+        if (typesPressed.length > 0) {
+          arrayProvisional = items.filter(byTypes);
+        }
       }
     }
     setItemsFiltered(arrayProvisional);
@@ -114,6 +137,15 @@ export const Craftsmanship: React.FC<{}> = () => {
     }
   };
 
+  function getTypeValue(event: React.ChangeEvent<HTMLInputElement>) {
+    const itemType = event.target.value;
+    if (!typesPressed.includes(itemType)) {
+      setTypesPressed(typesPressed.concat(itemType));
+    } else {
+      setTypesPressed(typesPressed.filter((type) => type !== itemType));
+    }
+  }
+
   return (
     <div className="Craftsmanship">
       <div className="itemFilters">
@@ -123,6 +155,12 @@ export const Craftsmanship: React.FC<{}> = () => {
             setItemName(e.target.value)
           }
         />
+        <div className="itemTypes">
+          <label htmlFor="">
+            Pechera
+            <input type="checkbox" onChange={getTypeValue} value={'Pechera'} />
+          </label>
+        </div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         {itemsFiltered.length > 0 ? (

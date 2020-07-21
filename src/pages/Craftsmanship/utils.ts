@@ -175,7 +175,7 @@ export const itemsMock = [
         id: 3,
         nombre: 'Cota de Anja',
         ruta: 'armor/cotaAnja',
-        tipo: 'pechera',
+        tipo: 'Pechera',
         rama: 'Aleación',
         rango: 'bajo',
         nivel: 1,
@@ -490,3 +490,11 @@ export function removeItem(
 ) {
     return items.filter((x) => x.nombre !== itemToRemove.nombre);
 }
+
+export const filterByItemTypes = (typesPressed: string[]) => (items: any) => {
+    for (const type of typesPressed) {
+        if (items.tipo.toLowerCase() === type.toLowerCase()) {
+            return items;
+        }
+    }
+};
