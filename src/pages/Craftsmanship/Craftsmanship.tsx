@@ -12,7 +12,6 @@ import {
 } from './types';
 import {
   calculateEquipmentStats,
-  checkIfAItemIsEquipped,
   equipmentStatsDefault,
   filterByItemName,
   filterByItemTypes,
@@ -43,12 +42,12 @@ export const Craftsmanship: React.FC<{}> = () => {
 
   function checkFilters() {
     let arrayProvisional = items;
-    const byName = filterByItemName(itemName);
-    const byTypes = filterByItemTypes(typesPressed);
     if (itemName.length > 0) {
+      const byName = filterByItemName(itemName);
       arrayProvisional = items.filter(byName);
     }
     if (typesPressed.length > 0) {
+      const byTypes = filterByItemTypes(typesPressed);
       arrayProvisional = items.filter(byTypes);
     }
     setItemsFiltered(arrayProvisional);
