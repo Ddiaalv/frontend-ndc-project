@@ -78,7 +78,16 @@ export const Craftsmanship: React.FC<{}> = () => {
     checkFilters();
   }, [namePressed, typesPressed]);
 
-  const paginate = (pageNumber: any) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: any) => {
+    const totalPages = Math.ceil(itemsFiltered.length / postsPerPage);
+    if (pageNumber < 1) {
+      pageNumber = 1;
+    }
+    if (pageNumber > totalPages) {
+      pageNumber = totalPages;
+    }
+    setCurrentPage(pageNumber);
+  };
 
   function checkFilters() {
     let arrayProvisional = items;
@@ -209,6 +218,7 @@ export const Craftsmanship: React.FC<{}> = () => {
         <Pagination
           postsPerPage={postsPerPage}
           totalPosts={itemsFiltered.length}
+          currentPage={currentPage}
           paginate={paginate}
         />
         <div id="Forge">
