@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import './Craftsmanship.scss';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { Items } from '../../components/monsters/craftsmanship/Items';
 import { DroppableItemFrame } from '../../components/monsters/craftsmanship/DroppableItemFrame';
+import { Pagination } from '../../components/monsters/craftsmanship/Pagination';
+import './Craftsmanship.scss';
 import {
   armorType,
   itemsEquipedProps,
@@ -15,39 +16,31 @@ import {
   equipmentStatsDefault,
   filterByItemName,
   filterByItemTypes,
+  getItemIndex,
   itemsEquippedDefault,
-  itemsMock,
   removeItem,
 } from './utils';
-import { Pagination } from '../../components/monsters/craftsmanship/Pagination';
 
 export const Craftsmanship: React.FC<{}> = () => {
-  // DATA STATE
-  const [items, setItems] = useState<(armorType | weaponType)[]>(itemsMock);
-  const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>(
-    itemsMock,
-  );
-  // INPUT DATA FROM USER
+  const [items, setItems] = useState<(armorType | weaponType)[]>([]);
+  const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>([]);
   const [namePressed, setNamePresed] = useState<string>('');
   const [typesPressed, setTypesPressed] = useState<string[]>([]);
-  // STATES FOR FETCH QUERY
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [error, setError] = useState();
-
   const [itemsEquippedStats, setItemsEquippedStats] = useState<itemsEquippedStatsProps>(
     equipmentStatsDefault,
   );
   const [itemsEquipped, setItemsEquipped] = useState<itemsEquipedProps>(
     itemsEquippedDefault,
   );
-  // STATES FOR PAGINATION
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [postsPerPage, setPostsPerPage] = useState<number>(12);
+  const [postsPerPage] = useState<number>(12);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentItems = itemsFiltered.slice(indexOfFirstPost, indexOfLastPost);
 
-  const [itemsType] = useState<string[]>([]);
+  const [armorsType] = useState<string[]>([]);
   const [weaponsType] = useState<string[]>([]);
 
   useEffect(() => {
@@ -62,10 +55,9 @@ export const Craftsmanship: React.FC<{}> = () => {
         const allItems = weaponsAndArmors[0].concat(weaponsAndArmors[1]);
         setItems(allItems);
         setItemsFiltered(allItems);
-        // TODO: Refactor
         allItems.map((item: any) => {
-          if (!itemsType.includes(item.tipo) && item.tipo !== 'arma') {
-            itemsType.push(item.tipo);
+          if (!armorsType.includes(item.tipo) && item.tipo !== 'arma') {
+            armorsType.push(item.tipo);
           }
           if (!weaponsType.includes(item.tipo_arma)) {
             weaponsType.push(item.tipo_arma);
@@ -84,8 +76,9 @@ export const Craftsmanship: React.FC<{}> = () => {
 
   useEffect(() => {
     checkFilters();
-    console.log(weaponsType);
   }, [namePressed, typesPressed]);
+
+  const paginate = (pageNumber: any) => setCurrentPage(pageNumber);
 
   function checkFilters() {
     let arrayProvisional = items;
@@ -109,17 +102,11 @@ export const Craftsmanship: React.FC<{}> = () => {
     if (!result.destination) {
       return;
     }
-    /* Error de ID, las ids son unicas y se asignan por item.
-    Al cambiar de pagina si elegimos un item, ese item cogera la id actual y al
-    arrastrarlo a la zona droppable no se pondrá el item elegido si no el item con la misma
-    id que se ha asignado antes.
-    */
     const droppableSectionName = result.destination.droppableId;
     const draggingItemType = itemsFiltered[result.source.index].tipo.toLowerCase();
     if (droppableSectionName === draggingItemType) {
-      const indexItemFromSource = result.source.index;
+      const indexItemFromSource = getItemIndex(itemsFiltered, result.draggableId);
       const draggableItem = itemsFiltered[indexItemFromSource];
-      console.log('Draggable: ', draggableItem);
       // @ts-ignore
       const oldItemEquipped = itemsEquipped[droppableSectionName];
       switch (droppableSectionName) {
@@ -183,8 +170,6 @@ export const Craftsmanship: React.FC<{}> = () => {
     }
   }
 
-  const paginate = (pageNumber: any) => setCurrentPage(pageNumber);
-
   return (
     <div className="Craftsmanship">
       <div className="itemFilters">
@@ -195,8 +180,8 @@ export const Craftsmanship: React.FC<{}> = () => {
           }
         />
         <div className="itemTypes">
-          {itemsType.map((itemType) => (
-            <label htmlFor={`name${itemType}`}>
+          {armorsType.concat(weaponsType).map((itemType, index) => (
+            <label htmlFor={`name${itemType}`} key={index}>
               <input
                 type="checkbox"
                 onChange={getTypeValue}

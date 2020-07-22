@@ -21,8 +21,8 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="Pagination">
-      {pageNumbers.map((pageNumber) => (
-        <div className="Page" onClick={() => paginate(pageNumber)}>
+      {pageNumbers.map((pageNumber, index) => (
+        <div className="Page" key={index} onClick={() => paginate(pageNumber)}>
           {pageNumber}
         </div>
       ))}
