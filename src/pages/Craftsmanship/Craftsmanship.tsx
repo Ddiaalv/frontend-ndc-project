@@ -75,6 +75,7 @@ export const Craftsmanship: React.FC<{}> = () => {
   }, [itemsEquipped]);
 
   useEffect(() => {
+    setCurrentPage(1);
     checkFilters();
   }, [namePressed, typesPressed]);
 
