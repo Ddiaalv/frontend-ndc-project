@@ -221,21 +221,19 @@ export function calculateEquipmentStats(itemsEquipped: itemsEquipedProps) {
     defensa: defenseSum,
   };
 }
-
 export function removeItem(
   items: (armorType | weaponType)[],
   itemToRemove: armorType | weaponType,
 ) {
   return items.filter((item) => item.nombre !== itemToRemove.nombre);
 }
-
 export const getItemIndex = (
-  itemsitos: (armorType | weaponType)[],
-  draggableId: string,
+  items: (armorType | weaponType)[],
+  draggableItemId: string,
 ) => {
   let indice = 0;
-  itemsitos.forEach((item, indexItem) => {
-    if (item.id.toString() === draggableId) {
+  items.forEach((item, indexItem) => {
+    if (item.id.toString() === draggableItemId) {
       indice = indexItem;
     }
   });

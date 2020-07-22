@@ -59,7 +59,7 @@ export const Craftsmanship: React.FC<{}> = () => {
           if (!armorsType.includes(item.tipo) && item.tipo !== 'arma') {
             armorsType.push(item.tipo);
           }
-          if (!weaponsType.includes(item.tipo_arma)) {
+          if (!weaponsType.includes(item.tipo_arma) && item.tipo_arma !== undefined) {
             weaponsType.push(item.tipo_arma);
           }
         });
