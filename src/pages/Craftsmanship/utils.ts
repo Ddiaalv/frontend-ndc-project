@@ -434,20 +434,6 @@ export const filterByItemName = (name: string) => (item: any) => {
     .includes(name.toLowerCase().trim());
 };
 
-export function checkIfAItemIsEquipped(equipment: any) {
-  let check = false;
-  for (const itemsEquippedKey in equipment) {
-    if (equipment.hasOwnProperty(itemsEquippedKey)) {
-      // @ts-ignore
-      const itemEquipped = equipment[itemsEquippedKey];
-      if (itemEquipped.nombre !== '') {
-        check = true;
-      }
-    }
-  }
-  return check;
-}
-
 export function calculateEquipmentStats(itemsEquipped: itemsEquipedProps) {
   let defenseSum = 0;
   let fireSum = 0;
