@@ -19,7 +19,6 @@ import {
   itemsMock,
   removeItem,
 } from './utils';
-import { URL } from '../../utils/routes';
 
 export const Craftsmanship: React.FC<{}> = () => {
   const [items, setItems] = useState<(armorType | weaponType)[]>(itemsMock);
@@ -66,13 +65,18 @@ export const Craftsmanship: React.FC<{}> = () => {
 
   function checkFilters() {
     let arrayProvisional = items;
+    const byTypes = filterByItemTypes(typesPressed);
+    const byName = filterByItemName(itemName);
     if (itemName.length > 0) {
-      const byName = filterByItemName(itemName);
-      arrayProvisional = items.filter(byName);
-    }
-    if (typesPressed.length > 0) {
-      const byTypes = filterByItemTypes(typesPressed);
-      arrayProvisional = items.filter(byTypes);
+      if (typesPressed.length > 0) {
+        arrayProvisional = items.filter(byName).filter(byTypes);
+      } else {
+        arrayProvisional = items.filter(byName);
+      }
+    } else {
+      if (typesPressed.length > 0) {
+        arrayProvisional = items.filter(byTypes);
+      }
     }
     setItemsFiltered(arrayProvisional);
   }
@@ -166,13 +170,18 @@ export const Craftsmanship: React.FC<{}> = () => {
         </div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
-        {itemsFiltered.length > 0 ? (
-          <Items items={itemsFiltered} />
-        ) : itemsFiltered.length === 0 ? (
-          'No se encuentra '
+        {isLoaded ? (
+          itemsFiltered.length > 0 ? (
+            <Items items={itemsFiltered} />
+          ) : itemsFiltered.length === 0 ? (
+            'No se encuentra '
+          ) : (
+            <Items items={items} />
+          )
         ) : (
-          <Items items={items} />
+          'Cargando datos...'
         )}
+
         <div id="Forge">
           <div className="ArmorSet" style={{ display: 'flex' }}>
             <div className="weaponSection">
