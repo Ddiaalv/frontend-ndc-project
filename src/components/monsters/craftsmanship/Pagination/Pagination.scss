@@ -1,0 +1,14 @@
+.Pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  .Page {
+    background: lightcoral;
+    margin: 5px;
+    min-width: 20px;
+    border: 1px solid #000;
+    padding: 2px;
+    text-align: center;
+  }
+}

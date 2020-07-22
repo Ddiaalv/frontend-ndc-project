@@ -67,9 +67,9 @@ export type itemsEquipedProps = {
   arma: weaponType | armorType;
   casco: armorType | weaponType;
   pechera: armorType | weaponType;
-  cintura: armorType | weaponType;
-  guanteletes: armorType | weaponType;
-  grebas: armorType | weaponType;
+  pantalon: armorType | weaponType;
+  guantes: armorType | weaponType;
+  botas: armorType | weaponType;
 };
 export type itemsEquippedStatsProps = {
   ataque: number;

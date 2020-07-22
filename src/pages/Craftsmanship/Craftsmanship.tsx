@@ -19,15 +19,18 @@ import {
   itemsMock,
   removeItem,
 } from './utils';
+import { Pagination } from '../../components/monsters/craftsmanship/Pagination';
 
 export const Craftsmanship: React.FC<{}> = () => {
+  // DATA STATE
   const [items, setItems] = useState<(armorType | weaponType)[]>(itemsMock);
-  const [itemsF, setItemsF] = useState<(armorType | weaponType)[]>();
-  const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>([]);
-
-  const [itemName, setItemName] = useState<string>('');
+  const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>(
+    itemsMock,
+  );
+  // INPUT DATA FROM USER
+  const [namePressed, setNamePresed] = useState<string>('');
   const [typesPressed, setTypesPressed] = useState<string[]>([]);
-
+  // STATES FOR FETCH QUERY
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [error, setError] = useState();
 
@@ -37,17 +40,37 @@ export const Craftsmanship: React.FC<{}> = () => {
   const [itemsEquipped, setItemsEquipped] = useState<itemsEquipedProps>(
     itemsEquippedDefault,
   );
+  // STATES FOR PAGINATION
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [postsPerPage, setPostsPerPage] = useState<number>(12);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentItems = itemsFiltered.slice(indexOfFirstPost, indexOfLastPost);
+
+  const [itemsType] = useState<string[]>([]);
+  const [weaponsType] = useState<string[]>([]);
 
   useEffect(() => {
     const URLWEAPONS = 'http://localhost:3010/weapons';
     const URLARMORS = 'http://localhost:3010/armors';
 
     Promise.all([
-      fetch(URLWEAPONS).then((value) => value.json()),
-      fetch(URLARMORS).then((value) => value.json()),
+      fetch(URLWEAPONS).then((weapon) => weapon.json()),
+      fetch(URLARMORS).then((armor) => armor.json()),
     ])
-      .then((value) => {
-        setItemsF(value[0].concat(value[1]));
+      .then((weaponsAndArmors) => {
+        const allItems = weaponsAndArmors[0].concat(weaponsAndArmors[1]);
+        setItems(allItems);
+        setItemsFiltered(allItems);
+        // TODO: Refactor
+        allItems.map((item: any) => {
+          if (!itemsType.includes(item.tipo) && item.tipo !== 'arma') {
+            itemsType.push(item.tipo);
+          }
+          if (!weaponsType.includes(item.tipo_arma)) {
+            weaponsType.push(item.tipo_arma);
+          }
+        });
         setIsLoaded(true);
       })
       .catch((err) => {
@@ -61,13 +84,14 @@ export const Craftsmanship: React.FC<{}> = () => {
 
   useEffect(() => {
     checkFilters();
-  }, [itemName, typesPressed]);
+    console.log(weaponsType);
+  }, [namePressed, typesPressed]);
 
   function checkFilters() {
     let arrayProvisional = items;
     const byTypes = filterByItemTypes(typesPressed);
-    const byName = filterByItemName(itemName);
-    if (itemName.length > 0) {
+    const byName = filterByItemName(namePressed);
+    if (namePressed.length > 0) {
       if (typesPressed.length > 0) {
         arrayProvisional = items.filter(byName).filter(byTypes);
       } else {
@@ -85,11 +109,17 @@ export const Craftsmanship: React.FC<{}> = () => {
     if (!result.destination) {
       return;
     }
+    /* Error de ID, las ids son unicas y se asignan por item.
+    Al cambiar de pagina si elegimos un item, ese item cogera la id actual y al
+    arrastrarlo a la zona droppable no se pondrá el item elegido si no el item con la misma
+    id que se ha asignado antes.
+    */
     const droppableSectionName = result.destination.droppableId;
     const draggingItemType = itemsFiltered[result.source.index].tipo.toLowerCase();
     if (droppableSectionName === draggingItemType) {
       const indexItemFromSource = result.source.index;
       const draggableItem = itemsFiltered[indexItemFromSource];
+      console.log('Draggable: ', draggableItem);
       // @ts-ignore
       const oldItemEquipped = itemsEquipped[droppableSectionName];
       switch (droppableSectionName) {
@@ -111,22 +141,22 @@ export const Craftsmanship: React.FC<{}> = () => {
             pechera: draggableItem,
           });
           break;
-        case 'guanteletes':
+        case 'guantes':
           setItemsEquipped({
             ...itemsEquipped,
-            guanteletes: draggableItem,
+            guantes: draggableItem,
           });
           break;
-        case 'cintura':
+        case 'pantalon':
           setItemsEquipped({
             ...itemsEquipped,
-            cintura: draggableItem,
+            pantalon: draggableItem,
           });
           break;
-        case 'grebas':
+        case 'botas':
           setItemsEquipped({
             ...itemsEquipped,
-            grebas: draggableItem,
+            botas: draggableItem,
           });
           break;
       }
@@ -153,26 +183,36 @@ export const Craftsmanship: React.FC<{}> = () => {
     }
   }
 
+  const paginate = (pageNumber: any) => setCurrentPage(pageNumber);
+
   return (
     <div className="Craftsmanship">
       <div className="itemFilters">
         <input
           type="text"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setItemName(e.target.value)
+            setNamePresed(e.target.value)
           }
         />
         <div className="itemTypes">
-          <label htmlFor="">
-            Pechera
-            <input type="checkbox" onChange={getTypeValue} value={'Pechera'} />
-          </label>
+          {itemsType.map((itemType) => (
+            <label htmlFor={`name${itemType}`}>
+              <input
+                type="checkbox"
+                onChange={getTypeValue}
+                value={itemType}
+                id={`name${itemType}`}
+              />
+              {itemType}
+            </label>
+          ))}
         </div>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
+        {/* NOTE: pass the isLoaded state like params to Items for render the content?*/}
         {isLoaded ? (
           itemsFiltered.length > 0 ? (
-            <Items items={itemsFiltered} />
+            <Items items={currentItems} />
           ) : itemsFiltered.length === 0 ? (
             'No se encuentra '
           ) : (
@@ -181,7 +221,11 @@ export const Craftsmanship: React.FC<{}> = () => {
         ) : (
           'Cargando datos...'
         )}
-
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={itemsFiltered.length}
+          paginate={paginate}
+        />
         <div id="Forge">
           <div className="ArmorSet" style={{ display: 'flex' }}>
             <div className="weaponSection">
@@ -194,18 +238,15 @@ export const Craftsmanship: React.FC<{}> = () => {
                 itemType={'pechera'}
               />
               <DroppableItemFrame
-                itemEquiped={itemsEquipped.cintura}
-                itemType={'cintura'}
+                itemEquiped={itemsEquipped.pantalon}
+                itemType={'pantalon'}
               />
-              <DroppableItemFrame
-                itemEquiped={itemsEquipped.grebas}
-                itemType={'grebas'}
-              />
+              <DroppableItemFrame itemEquiped={itemsEquipped.botas} itemType={'botas'} />
             </div>
             <div className="ArmorSectionRight">
               <DroppableItemFrame
-                itemEquiped={itemsEquipped.guanteletes}
-                itemType={'guanteletes'}
+                itemEquiped={itemsEquipped.guantes}
+                itemType={'guantes'}
               />
             </div>
           </div>
