@@ -6,10 +6,10 @@ import { DroppableItemFrame } from '../../components/monsters/craftsmanship/Drop
 import { Pagination } from '../../components/monsters/craftsmanship/Pagination';
 import './Craftsmanship.scss';
 import {
-  armorType,
+  ArmorType,
   itemsEquipedProps,
-  itemsEquippedStatsProps,
-  weaponType,
+  ItemsEquippedStatsProps,
+  WeaponType,
 } from './types';
 import {
   calculateEquipmentStats,
@@ -20,15 +20,16 @@ import {
   itemsEquippedDefault,
   removeItem,
 } from './utils';
+import { EquipmentStats } from '../../components/monsters/craftsmanship/EquipmentStats';
 
 export const Craftsmanship: React.FC<{}> = () => {
-  const [items, setItems] = useState<(armorType | weaponType)[]>([]);
-  const [itemsFiltered, setItemsFiltered] = useState<(armorType | weaponType)[]>([]);
+  const [items, setItems] = useState<(ArmorType | WeaponType)[]>([]);
+  const [itemsFiltered, setItemsFiltered] = useState<(ArmorType | WeaponType)[]>([]);
   const [namePressed, setNamePresed] = useState<string>('');
   const [typesPressed, setTypesPressed] = useState<string[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [error, setError] = useState();
-  const [itemsEquippedStats, setItemsEquippedStats] = useState<itemsEquippedStatsProps>(
+  const [itemsEquippedStats, setItemsEquippedStats] = useState<ItemsEquippedStatsProps>(
     equipmentStatsDefault,
   );
   const [itemsEquipped, setItemsEquipped] = useState<itemsEquipedProps>(
@@ -39,7 +40,6 @@ export const Craftsmanship: React.FC<{}> = () => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentItems = itemsFiltered.slice(indexOfFirstPost, indexOfLastPost);
-
   const [armorsType] = useState<string[]>([]);
   const [weaponsType] = useState<string[]>([]);
 
@@ -79,10 +79,13 @@ export const Craftsmanship: React.FC<{}> = () => {
     checkFilters();
   }, [namePressed, typesPressed]);
 
-  const paginate = (pageNumber: any) => {
+  const paginate = (pageNumber: number) => {
     const totalPages = Math.ceil(itemsFiltered.length / postsPerPage);
     if (pageNumber < 1) {
       pageNumber = 1;
+    }
+    if (totalPages === 0) {
+      pageNumber = 0;
     }
     if (pageNumber > totalPages) {
       pageNumber = totalPages;
@@ -246,14 +249,7 @@ export const Craftsmanship: React.FC<{}> = () => {
               />
             </div>
           </div>
-          <div className="EquipmentStats">
-            <p>Defensa: {itemsEquippedStats.defensa}</p>
-            <p>Fuego: {itemsEquippedStats.fuego}</p>
-            <p>Agua: {itemsEquippedStats.agua}</p>
-            <p>Rayo: {itemsEquippedStats.rayo}</p>
-            <p>Hielo: {itemsEquippedStats.hielo}</p>
-            <p>Draco: {itemsEquippedStats.draco}</p>
-          </div>
+          <EquipmentStats itemsEquippedStats={itemsEquippedStats} />
         </div>
       </DragDropContext>
     </div>
