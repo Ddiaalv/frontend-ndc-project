@@ -21,6 +21,7 @@ import {
   removeItem,
 } from './utils';
 import { EquipmentStats } from '../../components/monsters/craftsmanship/EquipmentStats';
+import { ItemFilters } from '../../components/monsters/craftsmanship/ItemFilters';
 
 export const Craftsmanship: React.FC<{}> = () => {
   const [items, setItems] = useState<(ArmorType | WeaponType)[]>([]);
@@ -40,8 +41,7 @@ export const Craftsmanship: React.FC<{}> = () => {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentItems = itemsFiltered.slice(indexOfFirstPost, indexOfLastPost);
-  const [armorsType] = useState<string[]>([]);
-  const [weaponsType] = useState<string[]>([]);
+  const [itemsType, setItemsType] = useState<string[]>([]);
 
   useEffect(() => {
     const URLWEAPONS = 'http://localhost:3010/weapons';
@@ -55,6 +55,8 @@ export const Craftsmanship: React.FC<{}> = () => {
         const allItems = weaponsAndArmors[0].concat(weaponsAndArmors[1]);
         setItems(allItems);
         setItemsFiltered(allItems);
+        const armorsType: string[] = [];
+        const weaponsType: string[] = [];
         allItems.map((item: any) => {
           if (!armorsType.includes(item.tipo) && item.tipo !== 'arma') {
             armorsType.push(item.tipo);
@@ -63,6 +65,7 @@ export const Craftsmanship: React.FC<{}> = () => {
             weaponsType.push(item.tipo_arma);
           }
         });
+        setItemsType(armorsType.concat(weaponsType));
         setIsLoaded(true);
       })
       .catch((err) => {
@@ -185,27 +188,13 @@ export const Craftsmanship: React.FC<{}> = () => {
 
   return (
     <div className="Craftsmanship">
-      <div className="itemFilters">
-        <input
-          type="text"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setNamePresed(e.target.value)
-          }
-        />
-        <div className="itemTypes">
-          {armorsType.concat(weaponsType).map((itemType, index) => (
-            <label htmlFor={`name${itemType}`} key={index}>
-              <input
-                type="checkbox"
-                onChange={getTypeValue}
-                value={itemType}
-                id={`name${itemType}`}
-              />
-              {itemType}
-            </label>
-          ))}
-        </div>
-      </div>
+      <ItemFilters
+        itemTypes={itemsType}
+        getItemName={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setNamePresed(e.target.value)
+        }
+        getItemType={getTypeValue}
+      />
       <DragDropContext onDragEnd={onDragEnd}>
         {/* NOTE: pass the isLoaded state like params to Items for render the content?*/}
         {isLoaded ? (

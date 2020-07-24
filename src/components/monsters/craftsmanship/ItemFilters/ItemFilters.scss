@@ -1,0 +1,21 @@
+.ItemFilters {
+  input[type='checkbox'] {
+    display: none;
+  }
+  :checked + label{
+    background: red;
+  }
+
+  label img {
+    background: #000;
+    padding: 3px;
+    width: 30px;
+    height: 30px;
+  }
+  label:hover {
+    background: #cf3a6b;
+  }
+  label:hover img {
+    background: #cf3a6b;
+  }
+}
