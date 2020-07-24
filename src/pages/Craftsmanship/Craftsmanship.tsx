@@ -116,9 +116,9 @@ export const Craftsmanship: React.FC<{}> = () => {
       return;
     }
     const droppableSectionName = result.destination.droppableId;
-    const draggingItemType = itemsFiltered[result.source.index].tipo.toLowerCase();
+    const indexItemFromSource = getItemIndex(itemsFiltered, result.draggableId);
+    const draggingItemType = itemsFiltered[indexItemFromSource].tipo.toLowerCase();
     if (droppableSectionName === draggingItemType) {
-      const indexItemFromSource = getItemIndex(itemsFiltered, result.draggableId);
       const draggableItem = itemsFiltered[indexItemFromSource];
       // @ts-ignore
       const oldItemEquipped = itemsEquipped[droppableSectionName];
