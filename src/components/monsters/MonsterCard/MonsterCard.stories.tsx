@@ -3,7 +3,7 @@ import { MonsterCard } from './MonsterCard';
 import { withA11y } from '@storybook/addon-a11y';
 
 export default {
-  title: 'MonsterCard',
+  title: 'Monsters / MonsterCard',
   decorators: [withA11y],
 };
 

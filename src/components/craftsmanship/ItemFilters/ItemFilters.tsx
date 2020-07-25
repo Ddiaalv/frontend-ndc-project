@@ -5,8 +5,8 @@ import { useState } from 'react';
 
 interface ItemFiltersProps {
   itemTypes: string[];
-  getItemName: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  getItemType: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  getItemName?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  getItemType?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const ItemFilters: React.FC<ItemFiltersProps> = ({

@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { select, text, withKnobs } from '@storybook/addon-knobs';
 
 export default {
-  title: 'Atoms / PostItMenu',
+  title: 'General / PostItMenu',
   decorators: [
     withA11y,
     withKnobs,

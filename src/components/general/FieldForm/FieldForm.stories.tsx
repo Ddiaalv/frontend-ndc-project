@@ -3,7 +3,7 @@ import { FieldForm } from './FieldForm';
 import { withA11y } from '@storybook/addon-a11y';
 
 export default {
-  title: 'Molecules / FieldForm',
+  title: 'General / FieldForm',
   decorators: [withA11y],
 };
 

@@ -3,7 +3,7 @@ import { CheckBoxForm } from './CheckBoxForm';
 import { withA11y } from '@storybook/addon-a11y';
 
 export default {
-  title: 'Molecules / CheckBoxForm',
+  title: 'General / CheckBoxForm',
   decorators: [withA11y],
 };
 const elements = ['Fuego', 'Agua', 'Rayo', 'Hielo', 'Draco'];
