@@ -2,10 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.scss';
 import { ROUTE } from './utils/routes';
-import { Header } from './components/organisms/Header';
-import { MonsterSelector } from './components/organisms/MonsterSelector';
-import { MonsterInformation } from './components/organisms/MonsterInformation';
+import { Header } from './components/sections/Header';
 import { Craftsmanship } from './pages/Craftsmanship';
+import { Monsters } from './pages/Monsters';
 
 const App: React.FC = () => {
   return (
@@ -20,14 +19,7 @@ const App: React.FC = () => {
               <Route exact path={ROUTE.armors} />
               <Route exact path={ROUTE.craftsmanship} component={Craftsmanship} />
               <Route exact path={ROUTE.felyne} />
-              <Route path={ROUTE.monsters.primary}>
-                <div className="NotebookContent">
-                  <MonsterSelector />
-                  <Route path={ROUTE.monsters.secondary}>
-                    <MonsterInformation />
-                  </Route>
-                </div>
-              </Route>
+              <Route path={ROUTE.monsters.primary} component={Monsters} />
             </Switch>
             <div className="paper-page paper-page-one" />
             <div className="paper-page paper-page-two" />

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import { Items } from '../../components/monsters/craftsmanship/Items';
-import { DroppableItemFrame } from '../../components/monsters/craftsmanship/DroppableItemFrame';
-import { Pagination } from '../../components/monsters/craftsmanship/Pagination';
+import { Items } from '../../components/craftsmanship/Items';
+import { DroppableItemFrame } from '../../components/craftsmanship/DroppableItemFrame';
+import { Pagination } from '../../components/craftsmanship/Pagination';
 import './Craftsmanship.scss';
 import {
   ArmorType,
@@ -20,13 +20,13 @@ import {
   itemsEquippedDefault,
   removeItem,
 } from './utils';
-import { EquipmentStats } from '../../components/monsters/craftsmanship/EquipmentStats';
-import { ItemFilters } from '../../components/monsters/craftsmanship/ItemFilters';
+import { EquipmentStats } from '../../components/craftsmanship/EquipmentStats';
+import { ItemFilters } from '../../components/craftsmanship/ItemFilters';
 
 export const Craftsmanship: React.FC<{}> = () => {
   const [items, setItems] = useState<(ArmorType | WeaponType)[]>([]);
   const [itemsFiltered, setItemsFiltered] = useState<(ArmorType | WeaponType)[]>([]);
-  const [namePressed, setNamePresed] = useState<string>('');
+  const [namePressed, setNamePressed] = useState<string>('');
   const [typesPressed, setTypesPressed] = useState<string[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [error, setError] = useState();
@@ -57,7 +57,7 @@ export const Craftsmanship: React.FC<{}> = () => {
         setItemsFiltered(allItems);
         const armorsType: string[] = [];
         const weaponsType: string[] = [];
-        allItems.map((item: any) => {
+        allItems.forEach((item: any) => {
           if (!armorsType.includes(item.tipo) && item.tipo !== 'arma') {
             armorsType.push(item.tipo);
           }
@@ -191,7 +191,7 @@ export const Craftsmanship: React.FC<{}> = () => {
       <ItemFilters
         itemTypes={itemsType}
         getItemName={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setNamePresed(e.target.value)
+          setNamePressed(e.target.value)
         }
         getItemType={getTypeValue}
       />
