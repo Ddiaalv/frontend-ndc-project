@@ -4,7 +4,9 @@ import { Article } from './index';
 
 describe('Article', () => {
   it('should display the default message', () => {
-    const renderResult: RenderResult = render(<Article />);
-    expect(renderResult.queryByText('Hello from Article!')).toBeTruthy();
+    const renderResult: RenderResult = render(
+      <Article text={'Irrelevant text...'} title={'Título'} />,
+    );
+    expect(renderResult.queryByText('Irrelevant text...')).toBeTruthy();
   });
 });
