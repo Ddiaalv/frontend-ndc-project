@@ -18,6 +18,7 @@ export const Items: React.FC<ItemsProps> = ({ items }) => (
             index={index}
             text={item.nombre}
             imgRoute={item.ruta}
+            itemInformation={item}
           />
         ))}
         {provided.placeholder}

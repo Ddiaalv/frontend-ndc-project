@@ -1,6 +1,5 @@
 export function getTypeImage(type: string) {
   let img = '';
-  console.log(type);
   switch (type.toLowerCase()) {
     case 'arco':
       img = 'weapon/icon/bR1';

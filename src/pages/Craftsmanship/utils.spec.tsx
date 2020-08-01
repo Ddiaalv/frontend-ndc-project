@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { filterByItemName, filterByItemTypes } from './utils';
+import {
+  filterByItemName,
+  filterByItemTypes,
+} from '../../domain/service/craftsmanship/filterItemsService';
 
 describe('Craftsmanship', () => {
   const items = [
