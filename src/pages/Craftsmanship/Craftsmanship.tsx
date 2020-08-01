@@ -13,15 +13,15 @@ import {
 } from './types';
 import {
   calculateEquipmentStats,
-  equipmentStatsDefault,
-  filterByItemName,
-  filterByItemTypes,
+  fetchItems,
+  getAllItems,
   getItemIndex,
-  itemsEquippedDefault,
-  removeItem,
-} from './utils';
+  manageItemsOnLists,
+} from '../../domain/service/craftsmanship/craftsmanshipService';
 import { EquipmentStats } from '../../components/craftsmanship/EquipmentStats';
 import { ItemFilters } from '../../components/craftsmanship/ItemFilters';
+import { equipmentStatsDefault, itemsEquippedDefault } from './itemsDefault';
+import { filterItems } from '../../domain/service/craftsmanship/filterItemsService';
 
 export const Craftsmanship: React.FC<{}> = () => {
   const [items, setItems] = useState<(ArmorType | WeaponType)[]>([]);
@@ -46,31 +46,13 @@ export const Craftsmanship: React.FC<{}> = () => {
   useEffect(() => {
     const URLWEAPONS = 'http://localhost:3010/weapons';
     const URLARMORS = 'http://localhost:3010/armors';
-
-    Promise.all([
-      fetch(URLWEAPONS).then((weapon) => weapon.json()),
-      fetch(URLARMORS).then((armor) => armor.json()),
-    ])
-      .then((weaponsAndArmors) => {
-        const allItems = weaponsAndArmors[0].concat(weaponsAndArmors[1]);
-        setItems(allItems);
-        setItemsFiltered(allItems);
-        const armorsType: string[] = [];
-        const weaponsType: string[] = [];
-        allItems.forEach((item: any) => {
-          if (!armorsType.includes(item.tipo) && item.tipo !== 'arma') {
-            armorsType.push(item.tipo);
-          }
-          if (!weaponsType.includes(item.tipo_arma) && item.tipo_arma !== undefined) {
-            weaponsType.push(item.tipo_arma);
-          }
-        });
-        setItemsType(armorsType.concat(weaponsType));
-        setIsLoaded(true);
-      })
-      .catch((err) => {
-        setError(error);
-      });
+    getAllItems(fetchItems(URLWEAPONS), fetchItems(URLARMORS)).then((results) => {
+      setItems(results.items);
+      setItemsFiltered(results.items);
+      setIsLoaded(results.isLoaded);
+      setError(results.error);
+      setItemsType(results.typeItems);
+    });
   }, []);
 
   useEffect(() => {
@@ -79,7 +61,7 @@ export const Craftsmanship: React.FC<{}> = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-    checkFilters();
+    setItemsFiltered(filterItems(items, typesPressed, namePressed));
   }, [namePressed, typesPressed]);
 
   const paginate = (pageNumber: number) => {
@@ -96,86 +78,23 @@ export const Craftsmanship: React.FC<{}> = () => {
     setCurrentPage(pageNumber);
   };
 
-  function checkFilters() {
-    let arrayProvisional = items;
-    const byTypes = filterByItemTypes(typesPressed);
-    const byName = filterByItemName(namePressed);
-    if (namePressed.length > 0) {
-      if (typesPressed.length > 0) {
-        arrayProvisional = items.filter(byName).filter(byTypes);
-      } else {
-        arrayProvisional = items.filter(byName);
-      }
-    } else {
-      if (typesPressed.length > 0) {
-        arrayProvisional = items.filter(byTypes);
-      }
-    }
-    setItemsFiltered(arrayProvisional);
-  }
-
-  const onDragEnd = (result: any) => {
+  function onDragEnd(result: any) {
     if (!result.destination) {
       return;
     }
     const droppableSectionName = result.destination.droppableId;
     const indexItemFromSource = getItemIndex(itemsFiltered, result.draggableId);
     const draggingItemType = itemsFiltered[indexItemFromSource].tipo.toLowerCase();
-    if (droppableSectionName === draggingItemType) {
-      const draggableItem = itemsFiltered[indexItemFromSource];
-      // @ts-ignore
-      const oldItemEquipped = itemsEquipped[droppableSectionName];
-      switch (droppableSectionName) {
-        case 'arma':
-          setItemsEquipped({
-            ...itemsEquipped,
-            arma: draggableItem,
-          });
-          break;
-        case 'casco':
-          setItemsEquipped({
-            ...itemsEquipped,
-            casco: draggableItem,
-          });
-          break;
-        case 'pechera':
-          setItemsEquipped({
-            ...itemsEquipped,
-            pechera: draggableItem,
-          });
-          break;
-        case 'guantes':
-          setItemsEquipped({
-            ...itemsEquipped,
-            guantes: draggableItem,
-          });
-          break;
-        case 'pantalon':
-          setItemsEquipped({
-            ...itemsEquipped,
-            pantalon: draggableItem,
-          });
-          break;
-        case 'botas':
-          setItemsEquipped({
-            ...itemsEquipped,
-            botas: draggableItem,
-          });
-          break;
+    const typeOfDroppableAndDraggingMatch = droppableSectionName === draggingItemType;
+    if (typeOfDroppableAndDraggingMatch) {
+      const itemsLists = manageItemsOnLists(result, itemsFiltered, itemsEquipped, items);
+      if (itemsLists !== undefined) {
+        setItemsFiltered(itemsLists.itemsFilteredCopy);
+        setItems(itemsLists.itemsCopy);
+        setItemsEquipped(itemsLists.itemsEquippedCopy);
       }
-      const itemsFilteredCopy = removeItem(itemsFiltered, draggableItem);
-      const itemsCopy = removeItem(items, draggableItem);
-      if (oldItemEquipped.nombre !== '') {
-        itemsFilteredCopy.push(oldItemEquipped);
-        itemsCopy.push(oldItemEquipped);
-      }
-      setItemsFiltered(itemsFilteredCopy);
-      setItems(itemsCopy);
-    } else {
-      // TODO: Show modal with error message and change border color of droppable frame
-      console.log(`debe de ser un ${droppableSectionName}`);
     }
-  };
+  }
 
   function getTypeValue(event: React.ChangeEvent<HTMLInputElement>) {
     const itemType = event.target.value;

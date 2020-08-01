@@ -112,3 +112,10 @@ export interface ItemsEquippedStatsProps {
   };
   precio: number;
 }
+
+export interface WeaponsArmorsProps {
+    items: [];
+    typeItems: string[];
+    isLoaded: boolean;
+    error: undefined;
+}
