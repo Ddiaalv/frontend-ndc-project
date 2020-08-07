@@ -6,26 +6,25 @@ import { DroppableItemFrame } from '../../components/craftsmanship/DroppableItem
 import { Pagination } from '../../components/craftsmanship/Pagination';
 import './Craftsmanship.scss';
 import {
-  ArmorType,
+  ArmorProps,
   itemsEquipedProps,
   ItemsEquippedStatsProps,
-  WeaponType,
+  WeaponsArmorsProps,
+  WeaponProps,
 } from './types';
 import {
-  calculateEquipmentStats,
   fetchItems,
   getAllItems,
-  getItemIndex,
-  manageItemsOnLists,
 } from '../../domain/service/craftsmanship/craftsmanshipService';
 import { EquipmentStats } from '../../components/craftsmanship/EquipmentStats';
 import { ItemFilters } from '../../components/craftsmanship/ItemFilters';
 import { equipmentStatsDefault, itemsEquippedDefault } from './itemsDefault';
-import { filterItems } from '../../domain/service/craftsmanship/filterItemsService';
+import { filter } from '../../domain/service/craftsmanship/filterItemsService';
+import { manageItem } from '../../domain/service/craftsmanship/itemsService';
 
 export const Craftsmanship: React.FC<{}> = () => {
-  const [items, setItems] = useState<(ArmorType | WeaponType)[]>([]);
-  const [itemsFiltered, setItemsFiltered] = useState<(ArmorType | WeaponType)[]>([]);
+  const [items, setItems] = useState<(ArmorProps | WeaponProps)[]>([]);
+  const [itemsFiltered, setItemsFiltered] = useState<(ArmorProps | WeaponProps)[]>([]);
   const [namePressed, setNamePressed] = useState<string>('');
   const [typesPressed, setTypesPressed] = useState<string[]>([]);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -46,22 +45,25 @@ export const Craftsmanship: React.FC<{}> = () => {
   useEffect(() => {
     const URLWEAPONS = 'http://localhost:3010/weapons';
     const URLARMORS = 'http://localhost:3010/armors';
-    getAllItems(fetchItems(URLWEAPONS), fetchItems(URLARMORS)).then((results) => {
-      setItems(results.items);
-      setItemsFiltered(results.items);
-      setIsLoaded(results.isLoaded);
-      setError(results.error);
-      setItemsType(results.typeItems);
-    });
+    // custom hook
+    getAllItems(fetchItems(URLWEAPONS), fetchItems(URLARMORS)).then(
+      (results: WeaponsArmorsProps) => {
+        setItems(results.items);
+        setItemsFiltered(results.items);
+        setIsLoaded(results.isLoaded);
+        setError(results.error);
+        setItemsType(results.typeItems);
+      },
+    );
   }, []);
 
   useEffect(() => {
-    setItemsEquippedStats(calculateEquipmentStats(itemsEquipped));
+    setItemsEquippedStats(manageItem.calculateEquipmentStats(itemsEquipped));
   }, [itemsEquipped]);
 
   useEffect(() => {
     setCurrentPage(1);
-    setItemsFiltered(filterItems(items, typesPressed, namePressed));
+    setItemsFiltered(filter.items(items, typesPressed, namePressed));
   }, [namePressed, typesPressed]);
 
   const paginate = (pageNumber: number) => {
@@ -83,11 +85,11 @@ export const Craftsmanship: React.FC<{}> = () => {
       return;
     }
     const droppableSectionName = result.destination.droppableId;
-    const indexItemFromSource = getItemIndex(itemsFiltered, result.draggableId);
+    const indexItemFromSource = manageItem.itemIndex(itemsFiltered, result.draggableId);
     const draggingItemType = itemsFiltered[indexItemFromSource].tipo.toLowerCase();
     const typeOfDroppableAndDraggingMatch = droppableSectionName === draggingItemType;
     if (typeOfDroppableAndDraggingMatch) {
-      const itemsLists = manageItemsOnLists(result, itemsFiltered, itemsEquipped, items);
+      const itemsLists = manageItem.onLists(result, itemsFiltered, itemsEquipped, items);
       if (itemsLists !== undefined) {
         setItemsFiltered(itemsLists.itemsFilteredCopy);
         setItems(itemsLists.itemsCopy);

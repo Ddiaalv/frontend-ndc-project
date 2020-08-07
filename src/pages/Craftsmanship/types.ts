@@ -1,4 +1,4 @@
-export interface ArmorType {
+export interface ArmorProps {
   id: number;
   nombre: string;
   ruta: string;
@@ -20,7 +20,7 @@ export interface ArmorType {
   habilidad1: string;
   habilidad2: string;
 }
-export interface WeaponType {
+export interface WeaponProps {
   id: number;
   nombre: string;
   rama: string;
@@ -64,12 +64,12 @@ export interface WeaponType {
   vial05?: string;
 }
 export type itemsEquipedProps = {
-  arma: WeaponType | ArmorType;
-  casco: ArmorType | WeaponType;
-  pechera: ArmorType | WeaponType;
-  pantalon: ArmorType | WeaponType;
-  guantes: ArmorType | WeaponType;
-  botas: ArmorType | WeaponType;
+  arma: WeaponProps | ArmorProps;
+  casco: ArmorProps | WeaponProps;
+  pechera: ArmorProps | WeaponProps;
+  pantalon: ArmorProps | WeaponProps;
+  guantes: ArmorProps | WeaponProps;
+  botas: ArmorProps | WeaponProps;
 };
 export interface ItemsEquippedStatsProps {
   tipo_item: string;

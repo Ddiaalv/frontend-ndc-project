@@ -1,12 +1,13 @@
-import { ArmorType, WeaponType } from '../../../pages/Craftsmanship/types';
+import { ArmorProps, WeaponProps } from '../../../pages/Craftsmanship/types';
 
-export const filterByItemName = (name: string) => (item: any) => {
+export const byName = (name: string) => (item: any) => {
   return item.nombre
-    .toLowerCase()
-    .trim()
-    .includes(name.toLowerCase().trim());
+      .toLowerCase()
+      .trim()
+      .includes(name.toLowerCase().trim());
 };
-export const filterByItemTypes = (typesPressed: string[]) => (items: any) => {
+
+export const byType = (typesPressed: string[]) => (items: any) => {
   for (const type of typesPressed) {
     if (items.tipo === 'arma') {
       if (items.tipo_arma.toLowerCase() === type.toLowerCase()) {
@@ -19,24 +20,26 @@ export const filterByItemTypes = (typesPressed: string[]) => (items: any) => {
   }
 };
 
-export function filterItems(
-  items: (ArmorType | WeaponType)[],
-  typesPressed: string[],
-  namePressed: string,
-) {
-  let arrayProvisional = items;
-  const byTypes = filterByItemTypes(typesPressed);
-  const byName = filterByItemName(namePressed);
-  if (namePressed.length > 0) {
-    if (typesPressed.length > 0) {
-      arrayProvisional = items.filter(byName).filter(byTypes);
+export const filter = {
+  items(
+      items: (ArmorProps | WeaponProps)[],
+      typesPressed: string[],
+      namePressed: string,
+  ) {
+    let arrayProvisional = items;
+    const byTypes = byType(typesPressed);
+    const byNames = byName(namePressed);
+    if (namePressed.length > 0) {
+      if (typesPressed.length > 0) {
+        arrayProvisional = items.filter(byNames).filter(byTypes);
+      } else {
+        arrayProvisional = items.filter(byNames);
+      }
     } else {
-      arrayProvisional = items.filter(byName);
+      if (typesPressed.length > 0) {
+        arrayProvisional = items.filter(byTypes);
+      }
     }
-  } else {
-    if (typesPressed.length > 0) {
-      arrayProvisional = items.filter(byTypes);
-    }
+    return arrayProvisional;
   }
-  return arrayProvisional;
-}
+};

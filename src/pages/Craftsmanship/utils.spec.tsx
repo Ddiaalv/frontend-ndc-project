@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
-  filterByItemName,
-  filterByItemTypes,
+  byName,
+  byType,
 } from '../../domain/service/craftsmanship/filterItemsService';
 
 describe('Craftsmanship', () => {
@@ -271,7 +271,7 @@ describe('Craftsmanship', () => {
 
   it('should return an array with the item "Cuchillo de cazador I"', () => {
     const irrelevantItemName = 'Cuchillo de cazador I';
-    const byName = filterByItemName(irrelevantItemName);
+    const byName = byName(irrelevantItemName);
     const itemsFiltered = items.filter(byName);
     const itemExpected = itemsFiltered[0].nombre;
     expect(itemExpected).toBe(irrelevantItemName);
@@ -285,7 +285,7 @@ describe('Craftsmanship', () => {
       'Cuchillo de cazador II',
       'Cuchillo de cazador III',
     ];
-    const byType = filterByItemTypes(typesPressed);
+    const byType = byType(typesPressed);
     const itemsFilteredByType = items.filter(byType);
     itemsFilteredByType.forEach((item, index) => {
       expect(item.nombre.toLowerCase()).toBe(typesResults[index].toLowerCase());
