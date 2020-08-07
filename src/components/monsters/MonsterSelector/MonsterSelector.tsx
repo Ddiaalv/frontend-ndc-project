@@ -8,7 +8,6 @@ import { CheckBoxForm } from '../../general/CheckBoxForm';
 export const MonsterSelector: React.FC<{}> = () => {
   const [nameTyped, setNameTyped] = useState<string>('');
   const [elementsPressed, setElementsPressed] = useState<string[]>([]);
-
   const elements = ['Fuego', 'Agua', 'Rayo', 'Hielo', 'Draco'];
 
   const elementMonster = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +27,7 @@ export const MonsterSelector: React.FC<{}> = () => {
           name={'monsterSearcher'}
           text={'Buscar monstruo:'}
           placeholder={''}
-          onChange={(inputValue) => setNameTyped(inputValue.target.value)}
+          onChange={(inputValue: React.ChangeEvent<HTMLInputElement>) => setNameTyped(inputValue.target.value)}
         />
         <CheckBoxForm
           onChange={elementMonster}

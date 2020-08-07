@@ -2,9 +2,10 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import './MonsterList.scss';
 import { MonsterIcon } from '../MonsterIcon';
-import { filterByElements, filterByMonsterName } from './filters';
-import { MonstersProps } from '../../monsters/MonsterInformation/types';
+import { MonstersProps } from '../MonsterInformation/types';
 import { URL } from '../../../utils/routes';
+import { getMonsterList } from '../../../domain/service/monsters/monstersService';
+import { checkSearchFilters } from '../../../domain/service/monsters/filterMonstersService';
 
 interface MonsterListProps {
   monsterName: string;
@@ -20,42 +21,19 @@ export const MonsterList: React.FC<MonsterListProps> = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
 
-  const byMonsterName = filterByMonsterName(monsterName);
-  const byElements = filterByElements(pressedElements);
-
-  const checkSearchFilters = (monsterList: MonstersProps[]) => {
-    if (monsterName.length > 0) {
-      if (pressedElements.length > 0) {
-        setFilteredMonsters(monsterList.filter(byMonsterName).filter(byElements));
-      } else {
-        setFilteredMonsters(monsterList.filter(byMonsterName));
-      }
-    } else {
-      setFilteredMonsters(monsterList.filter(byElements));
-    }
-  };
-
   useEffect(() => {
     let fetchUrl = `${URL.server}/listaMonstruos`;
     if (process.env.NODE_ENV !== 'production') {
       fetchUrl = `${URL.local}/monsters`;
     }
-    fetch(fetchUrl)
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setMonsters(result);
-        },
-        (errorFetch) => {
-          setIsLoaded(true);
-          setError(errorFetch);
-        },
-      );
+    getMonsterList(fetchUrl).then((result) => {
+      setMonsters(result);
+      setIsLoaded(true);
+    });
   }, []);
 
   useEffect(() => {
-    checkSearchFilters(monsters);
+    setFilteredMonsters(checkSearchFilters(monsters, monsterName, pressedElements));
   }, [monsterName, pressedElements]);
 
   return (
@@ -65,9 +43,11 @@ export const MonsterList: React.FC<MonsterListProps> = ({
       ) : !isLoaded ? (
         <p>Cargando...</p>
       ) : filteredMonsters.length !== 0 ? (
-        filteredMonsters.map((monstruo) => <MonsterIcon name={monstruo.ruta} />)
+        filteredMonsters.map((monstruo: MonstersProps) => (
+          <MonsterIcon name={monstruo.ruta} />
+        ))
       ) : monsters.length !== 0 ? (
-        monsters.map((monstruo) => <MonsterIcon name={monstruo.ruta} />)
+        monsters.map((monstruo: MonstersProps) => <MonsterIcon name={monstruo.ruta} />)
       ) : (
         <p>No existen coincidencias...</p>
       )}
