@@ -6,14 +6,12 @@ import {
 import { itemsEquippedDefault } from '../../../pages/Craftsmanship/itemsDefault';
 
 export const calculateNumberOfSlots = (slotsTotal: string[], slotName: string) => {
-  let slotCount = 0;
-  // reduce
-  slotsTotal.forEach((slot: string) => {
+  return slotsTotal.reduce((totalSlots:number, slot) => {
     if (slot === slotName) {
-      slotCount++;
+      totalSlots++;
     }
-  });
-  return slotCount;
+    return totalSlots;
+  }, 0);
 };
 
 export const manageItem = {
@@ -89,8 +87,7 @@ export const manageItem = {
     };
   },
   calculateEquipmentStats(itemsEquipped: any) {
-    // dominio enr
-    // crear objeto
+    // FIXME: Create data structure -> a object
     let defenseSum = 0;
     let fireSum = 0;
     let waterSum = 0;
@@ -128,8 +125,6 @@ export const manageItem = {
 
     for (const key in itemsEquipped) {
       if (itemsEquipped.hasOwnProperty(key)) {
-        // FIXME: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'itemsEquipedProps'.
-        // @ts-ignore
         const itemEquipped = itemsEquipped[key];
         if (itemEquipped.nombre !== '') {
           if (itemEquipped.tipo !== 'arma') {

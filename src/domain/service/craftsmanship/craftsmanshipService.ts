@@ -1,4 +1,4 @@
-import {WeaponsArmorsProps,} from '../../../pages/Craftsmanship/types';
+import { WeaponsArmorsProps } from '../../../pages/Craftsmanship/types';
 
 export const getAllItems = async (fetchWeapons: any, fetchArmors: any) => {
   const weaponsArmors: WeaponsArmorsProps = {
@@ -10,21 +10,22 @@ export const getAllItems = async (fetchWeapons: any, fetchArmors: any) => {
   await Promise.all([fetchWeapons, fetchArmors]).then((results) => {
     weaponsArmors.isLoaded = true;
     weaponsArmors.items = results[0].concat(results[1]);
-    const armorsType: string[] = [];
-    const weaponsType: string[] = [];
-    weaponsArmors.items.forEach((item: any) => {
-      if (!armorsType.includes(item.tipo) && item.tipo !== 'arma') {
-        armorsType.push(item.tipo);
-      }
-      if (!weaponsType.includes(item.tipo_arma) && item.tipo_arma !== undefined) {
-        weaponsType.push(item.tipo_arma);
-      }
-    });
-    weaponsArmors.typeItems = armorsType.concat(weaponsType);
+    weaponsArmors.typeItems = getItemsTypesList(weaponsArmors.items);
   });
   return weaponsArmors;
 };
 export const fetchItems = async (url: string) => {
   const response = await fetch(url);
   return await response.json();
+};
+const getItemsTypesList = (items: any) => {
+  return items.reduce((total: string[], item: any) => {
+    if (!total.includes(item.tipo) && item.tipo !== 'arma') {
+      total.push(item.tipo);
+    }
+    if (!total.includes(item.tipo_arma) && item.tipo_arma !== undefined) {
+      total.push(item.tipo_arma);
+    }
+    return total;
+  }, [] as string[]);
 };
